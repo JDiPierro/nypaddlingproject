@@ -83,15 +83,19 @@ func (a *API) userSignupHandler(w http.ResponseWriter, r *http.Request) {
 	var u model.User
 	err := json.NewDecoder(r.Body).Decode(&u)
 	if err != nil {
+		logrus.WithError(err).Error("Error decoding request")
 		response.Errorf(w, r, err, http.StatusInternalServerError, "Internal Server Error")
 		return
 	} else if u.Name == "" {
+		logrus.WithError(err).Error("Name is missing")
 		response.Errorf(w, r, nil, http.StatusBadRequest, "Name is missing")
 		return
 	} else if u.Email == "" {
+		logrus.WithError(err).Error("Email address is missing")
 		response.Errorf(w, r, nil, http.StatusBadRequest, "Email address is missing")
 		return
 	} else if u.Password == "" {
+		logrus.WithError(err).Error("Password is missing")
 		response.Errorf(w, r, nil, http.StatusBadRequest, "Password is missing")
 		return
 	}
@@ -102,21 +106,24 @@ func (a *API) userSignupHandler(w http.ResponseWriter, r *http.Request) {
 	// Hash the user password
 	err = u.HashPassword()
 	if err != nil {
+		logrus.WithError(err).Error("Error hashing new user password")
 		response.Errorf(w, r, err, http.StatusInternalServerError, "Internal Server Error")
 		return
 	}
 
 	// Create verify token
-	u.VerifyToken = a.createRandString(32)
+	u.VerifyToken = ""//a.createRandString(32)
 
 	// Save user to database
 	err = a.db.CreateUser(&u)
 	if err != nil {
 		if err.Error() == "email_address_already_exists" {
+			logrus.WithError(err).Error("Email address already exists")
 			response.Errorf(w, r, err, http.StatusBadRequest, "Email address already exists")
 			return
 		}
 
+		logrus.WithError(err).Error("Error saving new user to the DB")
 		response.Errorf(w, r, err, http.StatusInternalServerError, "Internal Server Error")
 		return
 	}
@@ -189,7 +196,8 @@ func (a *API) userUpdateProfileHandler(w http.ResponseWriter, r *http.Request) {
 		// Change email address
 		user.EmailBackup = append(user.EmailBackup, user.Email)
 		user.Email = u.Email
-		user.VerifyToken = a.createRandString(32)
+		// Disabling verification token generation so we don't have to set up emailing or manually edit users.
+		user.VerifyToken = "" // a.createRandString(32)
 
 		// Send verification email
 		templateData0 := struct {
@@ -263,23 +271,10 @@ func (a *API) userUpdateProfileHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *API) userProfileHandler(w http.ResponseWriter, r *http.Request) {
-	// Get jwt claims
-	claims, ok := r.Context().Value(ContextJWTKey).(jwt.MapClaims)
+	// Get User
+	user, ok := r.Context().Value(ContextKeyUser).(*model.User)
 	if !ok {
 		response.Errorf(w, r, nil, http.StatusInternalServerError, "Internal Server Error")
-	}
-
-	// Get user id
-	id, err := a.getID(claims)
-	if err != nil {
-		response.Errorf(w, r, nil, http.StatusUnauthorized, "Unauthorized")
-	}
-
-	// Get the user
-	user, err := a.db.GetUser(id)
-	if err != nil || user == nil {
-		response.Errorf(w, r, err, http.StatusInternalServerError, "Internal Server Error")
-		return
 	}
 
 	// Omit password and reset token

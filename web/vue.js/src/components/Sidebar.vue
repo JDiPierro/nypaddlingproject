@@ -1,48 +1,27 @@
 <template>
   <v-navigation-drawer :clipped="$vuetify.breakpoint.lgAndUp" v-model="drawer" fixed app disable-resize-watcher>
-    <v-img :aspect-ratio="16/9" :src="require('../assets/sidebar.png')">
-      <v-layout pa-2 column fill-height class="lightbox white--text">
-        <v-spacer></v-spacer>
-        <v-flex shrink>
-          <v-avatar :tile="false" size="32px" color="primary">
-            <img :src="getAvatar" :alt="getName">
-          </v-avatar>
-          <div class="subheading">{{user.name}}</div>
-          <div class="body-1">{{user.email}}</div>
-        </v-flex>
-      </v-layout>
-    </v-img>
 
     <v-list dense>
-      <v-list-tile @click="goTo('/')">
-        <v-list-tile-action>
+      <v-list-item @click="goTo('/')">
+        <v-list-item-action>
           <v-icon>home</v-icon>
-        </v-list-tile-action>
-        <v-list-tile-content>
-          <v-list-tile-title>Home</v-list-tile-title>
-        </v-list-tile-content>
-      </v-list-tile>
-
-      <v-list-tile @click="goTo('/profile')">
-        <v-list-tile-action>
-          <v-icon>person</v-icon>
-        </v-list-tile-action>
-        <v-list-tile-content>
-          <v-list-tile-title>Profile</v-list-tile-title>
-        </v-list-tile-content>
-      </v-list-tile>
-
-      <v-divider></v-divider>
-
-      <v-list-tile @click="doLogout">
-        <v-list-tile-action>
-          <v-icon>power_settings_new</v-icon>
-        </v-list-tile-action>
-        <v-list-tile-content>
-          <v-list-tile-title>Logout</v-list-tile-title>
-        </v-list-tile-content>
-      </v-list-tile>
+        </v-list-item-action>
+        <v-list-item-content>
+          <v-list-item-title>Home</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
     </v-list>
+
+    <v-divider></v-divider>
+
+    <v-list-item @click="doLogout">
+      <v-list-item-action>
+        <v-icon>power_settings_new</v-icon>
+      </v-list-item-action>
+      <v-list-item-content>
+        <v-list-item-title>Logout</v-list-item-title>
+      </v-list-item-content>
+    </v-list-item>
   </v-navigation-drawer>
 </template>
 

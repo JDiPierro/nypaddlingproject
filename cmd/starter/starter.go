@@ -32,9 +32,15 @@ func init() {
 		logrus.SetLevel(logrus.InfoLevel)
 	}
 
-	logrus.SetFormatter(&logrus.TextFormatter{
-		FullTimestamp: true,
-	})
+	if *debugFlag {
+		logrus.SetFormatter(&logrus.TextFormatter{
+			ForceColors:   true,
+			FullTimestamp: true,
+		})
+	} else {
+		logrus.SetFormatter(&logrus.JSONFormatter{})
+	}
+	logrus.SetReportCaller(false)
 }
 
 func main() {

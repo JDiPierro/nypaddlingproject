@@ -86,6 +86,7 @@ func (i *Instance) Start(file string) {
 		Handler: router,
 	}
 
+	logrus.Info("Listening on ", i.Config.ListenAddress)
 	err = i.httpServer.ListenAndServe()
 	if err != http.ErrServerClosed {
 		logrus.WithError(err).Error("HTTP Server stopped unexpected")

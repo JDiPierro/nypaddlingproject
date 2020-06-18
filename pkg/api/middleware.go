@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"fmt"
+	"github.com/ricoberger/go-vue-starter/pkg/api/response"
 	"math/rand"
 	"net/http"
 	"strings"
@@ -17,18 +18,18 @@ type ContextKey string
 
 // ContextJWTKey is the key for the jwt context value
 const ContextJWTKey ContextKey = "jwt"
+const ContextKeyUser ContextKey = "user"
 
 // logMiddleware handles logging
 func (a *API) logMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		logrus.WithFields(logrus.Fields{
-			"host":       r.Host,
 			"address":    r.RemoteAddr,
 			"method":     r.Method,
 			"requestURI": r.RequestURI,
 			"proto":      r.Proto,
 			"useragent":  r.UserAgent(),
-		}).Info("HTTP request information")
+		}).Infof("%s - %s", r.Method, r.RequestURI)
 
 		next.ServeHTTP(w, r)
 	})
@@ -73,7 +74,23 @@ func (a *API) jwtMiddleware(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
+		// Get user id
+		id, err := a.getID(claims)
+		if err != nil {
+			response.Errorf(w, r, nil, http.StatusUnauthorized, "Unauthorized")
+			return
+		}
+
+		// Get the user
+		user, err := a.db.GetUser(id)
+		if err != nil || user == nil {
+			logrus.WithError(err).Error("Error looking up user")
+			response.Errorf(w, r, nil, http.StatusUnauthorized, "Unauthorized")
+			return
+		}
+
 		ctx := context.WithValue(r.Context(), ContextJWTKey, claims)
+		ctx = context.WithValue(r.Context(), ContextKeyUser, user)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }

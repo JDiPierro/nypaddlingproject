@@ -23,7 +23,7 @@ func Errorf(w http.ResponseWriter, r *http.Request, err error, code int, message
 		"requestURI": r.RequestURI,
 		"proto":      r.Proto,
 		"useragent":  r.UserAgent(),
-	}).WithError(err).Debug(message)
+	}).WithError(err).Error(message)
 
 	errorMessage := Error{
 		Error:   true,

@@ -2,10 +2,7 @@ package mongodb
 
 import (
 	"context"
-
-	"github.com/mongodb/mongo-go-driver/bson"
 	"github.com/mongodb/mongo-go-driver/mongo"
-	"github.com/mongodb/mongo-go-driver/mongo/options"
 )
 
 // Config represents MongoDB configuration
@@ -24,6 +21,9 @@ type DB struct {
 // Collections represents all needed db collections
 type Collections struct {
 	users *mongo.Collection
+	applications *mongo.Collection
+	environments *mongo.Collection
+	deployments *mongo.Collection
 }
 
 // NewConnection creates a new database connection
@@ -39,20 +39,7 @@ func NewConnection(config *Config) (*DB, error) {
 		return nil, err
 	}
 
-	userIndexOptions := options.Index()
-	userIndexOptions.SetUnique(true)
-
-	users := client.Database(config.DatabaseName).Collection("users")
-	users.Indexes().CreateOne(context.Background(), mongo.IndexModel{
-		Keys: bson.M{
-			"email": 1,
-		},
-		Options: userIndexOptions,
-	})
-
-	collections := &Collections{
-		users: users,
-	}
+	collections := initCollections(client, config)
 
 	return &DB{
 		config:      config,

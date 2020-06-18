@@ -1,21 +1,11 @@
 <template>
-  <v-toolbar app color="primary" :clipped-left="$vuetify.breakpoint.lgAndUp" dark>
-    <v-toolbar-title class="headline text-uppercase header" @click="goTo('/')">
-      <v-toolbar-side-icon v-if="isAuthenticated === true" @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <span v-bind:class="{ 'hidden-xs-only': isAuthenticated }">Go &#9829; Vue</span>
-      <span class="font-weight-light " v-bind:class="{ 'hidden-xs-only': isAuthenticated}"> STARTER</span>
+  <v-app-bar app color="primary" :clipped-left="$vuetify.breakpoint.lgAndUp" dark>
+    <v-toolbar-title class="headline header" @click="goTo('/')">
+      <v-app-bar-nav-icon v-if="isAuthenticated === true" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <span v-bind:class="{ 'hidden-xs-only': isAuthenticated }">Upstate NY Paddling Project</span>
     </v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-btn v-if="isAuthenticated === false" class="hidden-xs-only" to="/login" flat>Login</v-btn>
-    <v-btn v-if="isAuthenticated === false" class="hidden-xs-only" to="/signup" flat>Sign up</v-btn>
-
-    <v-btn v-if="isAuthenticated === true" @click="goTo('/')" offset-y icon>
-      <v-icon>apps</v-icon>
-    </v-btn>
-    <v-btn v-if="isAuthenticated === true" @click="goTo('/')" offset-y icon>
-      <v-icon>notifications</v-icon>
-    </v-btn>
-  </v-toolbar>
+  </v-app-bar>
 </template>
 
 <script lang="ts">

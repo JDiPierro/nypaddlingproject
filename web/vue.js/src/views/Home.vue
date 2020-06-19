@@ -6,19 +6,18 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import { Getter } from 'vuex-class';
+import { mapGetters } from 'vuex';
 
 import Dashboard from '../components/Dashboard.vue';
 import LandingPage from '../components/LandingPage.vue';
 
-@Component({
+export default {
   components: {
     Dashboard,
     LandingPage,
   },
-})
-export default class Home extends Vue {
-  @Getter('isAuthenticated', { namespace: 'user' }) private isAuthenticated!: boolean;
+  computed: {
+    ...mapGetters('user', ['isAuthenticated'])
+  }
 }
 </script>

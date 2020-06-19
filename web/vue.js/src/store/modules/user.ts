@@ -60,7 +60,7 @@ const getters: GetterTree<IUserState, IRootState> = {
 
 // Actions
 const actions: ActionTree<IUserState, IRootState> = {
-  async login({ commit }, fbAuth) {
+  async login({ commit }, { fbAuth }) {
       //commit('SET_USER', fbAuth);
       commit('SET_TOKEN', fbAuth.accessToken);
   },
@@ -106,11 +106,10 @@ const mutations: MutationTree<IUserState> = {
     us.name = payload.name;
   },
 
-  SET_TOKEN(us: IUserState, payload: IUserState) {
-    localStorage.setItem(AUTH_TOKEN, payload.token as string);
+  SET_TOKEN(us: IUserState, payload) {
+    localStorage.setItem(AUTH_TOKEN, payload as string);
 
-    us.token = payload.token;
-
+    us.token = payload as string;
   },
 
   UNSET_USER(us: IUserState) {

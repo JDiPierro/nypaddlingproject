@@ -34,7 +34,7 @@ func (a *API) InitRouter() {
 
 func (a *API) authenticatedMiddleware(apiHandler http.HandlerFunc) http.HandlerFunc {
 	return a.publicMiddleware(apiHandler)
-	// Disabling authentication for now, we'll deploy behind an SG that restricts access to PUBG offices
+	// Disabling authentication for now...
 	//return a.corsMiddleware(a.logMiddleware(a.jwtMiddleware(apiHandler)))
 }
 

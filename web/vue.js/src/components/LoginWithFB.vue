@@ -15,7 +15,7 @@
         let self = this;
         await window.FB.login(function(response) {
           if (response.authResponse) {
-            self.login(response.authResponse)
+            self.login({ fbAuth: response.authResponse })
           } else {
             alert("Facebook login failed...");
           }

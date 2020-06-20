@@ -25,4 +25,4 @@ heroku_push:
 	heroku container:push -a nypaddlingproject web
 
 release:
-	heroku container:release -a nypaddlingproject web
+	git push heroku master

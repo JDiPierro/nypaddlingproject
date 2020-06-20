@@ -3,7 +3,7 @@ module.exports = {
     externals: {
       // global app config object
       config: JSON.stringify({
-        apiUrl: process.env.API_URL || 'localhost:8080/api'
+        apiUrl: process.env.API_URL || 'nypaddlingproject.herokuapp.com/api'
       })
     }
   },

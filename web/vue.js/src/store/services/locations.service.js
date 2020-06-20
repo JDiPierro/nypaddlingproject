@@ -11,6 +11,8 @@ async function load () {
   }).get(`/locations`, {
     timeout: 10000
   }).then((response) => {
+    console.log("API Response:")
+    console.log(response.data)
     return response.data
   })
 }

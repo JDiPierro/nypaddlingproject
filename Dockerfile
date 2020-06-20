@@ -1,26 +1,38 @@
-FROM node:10 as ui
+# build
+FROM node:11.12.0-alpine as build-vue
 
-WORKDIR /biome
+WORKDIR /app
 
-ADD . .
+ENV PATH /app/node_modules/.bin:$PATH
 
-RUN cd web/vue.js && yarn install && yarn build
+COPY ./web/vue.js/package*.json ./
+RUN yarn install
 
-## Build the server, copy the built UI over
-FROM golang:1.12 as builder
+COPY ./web/vue.js .
+RUN yarn build
 
-WORKDIR /starter
+# production
+FROM nginx:stable-alpine as production
 
-# Get Delve for interactive debugging
-RUN go get -u github.com/go-delve/delve/cmd/dlv
+WORKDIR /app
 
-# Get `esc` for file embedding
-RUN go get -u github.com/mjibson/esc
+RUN apk update && apk add --no-cache python3 git && \
+    python3 -m ensurepip && \
+    rm -r /usr/lib/python*/ensurepip && \
+    pip3 install --upgrade pip setuptools && \
+    if [ ! -e /usr/bin/pip ]; then ln -s pip3 /usr/bin/pip ; fi && \
+    if [[ ! -e /usr/bin/python ]]; then ln -sf /usr/bin/python3 /usr/bin/python; fi && \
+    rm -r /root/.cache
+RUN apk update && apk add gcc python3-dev musl-dev
 
-ADD . .
-COPY --from=ui /biome/web/vue.js/dist ./web/vue.js/dist
+COPY --from=build-vue /app/dist /usr/share/nginx/html
+COPY ./nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
-RUN make build
-RUN cp ./bin/* /bin
+COPY ./pyserver/requirements.pip ./
+RUN pip install -r requirements.pip
+RUN pip install gunicorn
 
-CMD ["starter"]
+COPY ./pyserver .
+
+CMD gunicorn -b 0.0.0.0:5000 server:app --daemon && \
+      nginx -g 'daemon off;'

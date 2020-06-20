@@ -1,9 +1,8 @@
 import jwtDecode from 'jwt-decode';
 import md5 from 'md5';
-import { ActionContext, ActionTree, GetterTree, Module, MutationTree } from 'vuex';
 
 import { API_ENDPOINT, AUTH_TOKEN } from '../../constants';
-
+import { userService } from "../services"
 
 // Initial State
 const state = (() => {
@@ -47,7 +46,7 @@ const getters = {
 const actions = {
   async login({ commit }, { fbAuth }) {
       //commit('SET_USER', fbAuth);
-      commit('SET_TOKEN', fbAuth.accessToken);
+      commit('SET_TOKEN', user.id);
   },
 
   async get({commit}) {

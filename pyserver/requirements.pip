@@ -2,6 +2,6 @@ pymongo==3.9.0
 flask==1.1.1
 flask_cors
 flask_pymongo
-Flask-Social
-flask-mongoengine
-facebook-sdk
+flask-login
+flask_dance
+git+https://github.com/mitsuhiko/flask-oauth

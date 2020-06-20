@@ -18,11 +18,10 @@ services:
   ################
   # Our services #
   ################
-
   app:
     build:
       context: .
-    image: starter-builder
+    image: nypaddlingproject
     ports:
       - "8080:8080"
     depends_on:
@@ -30,8 +29,14 @@ services:
     volumes:
       # Mount our local codebase over the codebase baked into the image.
       # Restarting the container will run your local code, no need to rebuild.
-      - .:/starter
-    command: ["go", "run", "cmd/starter/starter.go", "--debug"]
+      - ./pyserver/server.py:/app/server.py
+      - ./web/vue.js/dist:/app/dist
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    environment:
+      PORT: 8080
+      API_URL: "localhost:8080"
+      BASE_URL: "localhost:8080"
+      DIST_PATH: "./dist"
 
 volumes:
   data:

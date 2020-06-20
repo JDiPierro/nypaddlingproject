@@ -4,4 +4,6 @@ flask_cors
 flask_pymongo
 flask-login
 flask_dance
+dnspython
 git+https://github.com/mitsuhiko/flask-oauth
+sentry-sdk==0.15.1

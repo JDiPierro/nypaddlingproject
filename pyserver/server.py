@@ -9,6 +9,9 @@ import os
 import random
 from datetime import datetime
 
+import sentry_sdk
+sentry_sdk.init("https://9029e54585544861aaf3a574c79d0dc4@o410319.ingest.sentry.io/5284155")
+
 #################
 # configuration #
 #################

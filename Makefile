@@ -26,3 +26,6 @@ heroku_push:
 
 release:
 	git push heroku master
+
+logs:
+	heroku logs --tail

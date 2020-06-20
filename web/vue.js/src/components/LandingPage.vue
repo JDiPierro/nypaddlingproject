@@ -21,19 +21,13 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-
-import LoremIpsum from '../components/LoremIpsum.vue';
+<script>
 import LoginWithFB from '../components/LoginWithFB.vue';
 
-@Component({
+export default {
   components: {
-    LoremIpsum,
     LoginWithFB,
   },
-})
-export default class LandingPage extends Vue {
 }
 </script>
 

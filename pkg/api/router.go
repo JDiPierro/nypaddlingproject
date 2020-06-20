@@ -21,15 +21,6 @@ func (a *API) InitRouter() {
 	a.Router.HandleFunc("/api/v1/account/password", a.publicMiddleware(a.forgotPasswordHandler)).Methods("POST")
 	a.Router.HandleFunc("/api/v1/account/password", a.publicMiddleware(a.resetPasswordHandler)).Methods("PUT")*/
 
-	// Webhook for creating a Deployment
-	a.Router.HandleFunc("/api/v1/webhook", a.logMiddleware(a.webhookHandler)).Methods("POST")
-
-	// Data retrieval endpoints for the UI
-	a.Router.HandleFunc("/api/v1/applications", a.authenticatedMiddleware(a.getApplicationsHandler)).Methods("GET")
-	a.Router.HandleFunc("/api/v1/deployments", a.authenticatedMiddleware(a.getDeploymentsHandler)).Methods("GET")
-	a.Router.HandleFunc("/api/v1/deployment/{app_id}/{env_id}/latest", a.authenticatedMiddleware(a.mostRecentDeployForAppHandler)).Methods("GET")
-	a.Router.HandleFunc("/api/v1/environments", a.authenticatedMiddleware(a.getEnvironmentsHandler)).Methods("GET")
-	a.Router.HandleFunc("/api/v1/environment/{env_id}/overview", a.authenticatedMiddleware(a.environmentOverview)).Methods("GET")
 }
 
 func (a *API) authenticatedMiddleware(apiHandler http.HandlerFunc) http.HandlerFunc {

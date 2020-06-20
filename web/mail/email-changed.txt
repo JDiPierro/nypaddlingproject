@@ -1,5 +1,0 @@
-Hi {{.Name}},
-
-You changed your email address to {{.NewEmail}}.
-
-If you have not changed your email address please contact us under support@example.com

@@ -24,27 +24,9 @@ type DB interface {
 	SaveUser(u *model.User) error
 	DeleteUser(id string) error
 
-	// Application management
-	CreateApplication(app *model.Application) error
-	SaveApplication(app *model.Application) error
-	GetApplications() ([]*model.Application, error)
-	BulkGetApplications(appIDs []string) ([]*model.Application, error)
-	GetApplication(id string) (*model.Application, error)
-	GetApplicationByName(name string) (*model.Application, error)
-
 	// Environment management
-	CreateEnvironment(env *model.Environment) error
-	GetEnvironments() ([]*model.Environment, error)
-	GetEnvironmentsForApp(appID string) ([]*model.Environment, error)
-	GetEnvironmentByName(name string) (*model.Environment, error)
-
-	// Deployment management
-	CreateDeployment(deploy *model.Deployment) error
-	GetDeployment(id string) (*model.Deployment, error)
-	GetDeployments() ([]*model.Deployment, error)
-	GetLatestDeployForAppEnv(appID string, envID string) (*model.Deployment, error)
-	GetDeploymentsForApp(appID string) ([]*model.Deployment, error)
-	GetDeploymentsForEnv(envID string) ([]*model.Deployment, error)
+	CreateLocation(env *model.Location) error
+	GetLocation() ([]*model.Location, error)
 }
 
 // NewConnection creates a new database connection

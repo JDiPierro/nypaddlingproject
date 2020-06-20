@@ -2,26 +2,30 @@
   <v-app>
     <Sidebar v-if="isAuthenticated === true" v-model="drawer" />
     <Header v-model="drawer" />
-    <router-view/>
+      <v-container fluid>
+        <router-view></router-view>
+      </v-container>
   </v-app>
 </template>
 
-<script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import { Getter } from 'vuex-class';
+<script>
+import { mapGetters } from 'vuex';
 
 import Header from './components/Header.vue';
 import Sidebar from './components/Sidebar.vue';
 
-@Component({
+export default {
   components: {
     Header,
-    Sidebar,
+    Sidebar
   },
-})
-export default class App extends Vue {
-  @Getter('isAuthenticated', { namespace: 'user' }) private isAuthenticated!: boolean;
-
-  private drawer: boolean = false;
+  computed: {
+    ...mapGetters('user', ['isAuthenticated'])
+  },
+  data: () => {
+    return {
+      drawer: false,
+    }
+  }
 }
 </script>

@@ -15,16 +15,14 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-
-@Component
-export default class NotFound extends Vue {
-  private goHome() {
-    this.$router.replace('/');
-  }
-
-  private goBack() {
-    this.$router.back();
+export default {
+  methods: {
+    goHome: function() {
+      this.$router.replace('/');
+    },
+     goBack: function() {
+       this.$router.back();
+     }
   }
 }
 </script>

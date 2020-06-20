@@ -82,3 +82,6 @@ dev: vue-build
 
 test_ci:
 	echo "TODO: Write Tests..."
+
+dbs:
+	docker-compose up -d mongo mongo-express

@@ -28,7 +28,6 @@ type API struct {
 }
 
 type Services struct {
-	webhook *webhook.Service
 }
 
 // New returns the api settings
@@ -39,7 +38,6 @@ func New(config *Config, db db.DB, mail *mail.Client, router *mux.Router) (*API,
 		mail:   mail,
 
 		services: &Services{
-			webhook.NewService(db),
 		},
 
 		Router: router,

@@ -194,3 +194,4 @@ bin
 tmp
 web/vue.js/dist
 data
+docker-compose.override.yml

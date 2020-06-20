@@ -21,9 +21,7 @@ type DB struct {
 // Collections represents all needed db collections
 type Collections struct {
 	users *mongo.Collection
-	applications *mongo.Collection
-	environments *mongo.Collection
-	deployments *mongo.Collection
+	locations *mongo.Collection
 }
 
 // NewConnection creates a new database connection

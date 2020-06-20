@@ -3,25 +3,10 @@ import md5 from 'md5';
 import { ActionContext, ActionTree, GetterTree, Module, MutationTree } from 'vuex';
 
 import { API_ENDPOINT, AUTH_TOKEN } from '../../constants';
-import { IRootState } from './types';
 
-// Interfaces
-export interface IUserState {
-  email?: string;
-  id?: string;
-  name?: string;
-  token?: string;
-}
-
-export interface IJWTDecoded {
-  exp: number;
-  id: string;
-  email: string;
-  name: string;
-}
 
 // Initial State
-const state: IUserState = (() => {
+const state = (() => {
   const token = localStorage.getItem(AUTH_TOKEN);
 
   if (token === null || token === '') {
@@ -39,16 +24,16 @@ const state: IUserState = (() => {
 })();
 
 // Getters
-const getters: GetterTree<IUserState, IRootState> = {
-  isAuthenticated(us: IUserState): boolean {
+const getters = {
+  isAuthenticated(us) {
     return !!us.token;
   },
 
-  getName(us: IUserState): string {
+  getName(us) {
     return us.name ? us.name : '';
   },
 
-  getAvatar(us: IUserState): string {
+  getAvatar(us) {
     const base = 'https://www.gravatar.com/avatar/';
     const query = `d=mm&r=g&s=${512}`;
     const formattedEmail = ('' + us.email).trim().toLowerCase();
@@ -59,13 +44,13 @@ const getters: GetterTree<IUserState, IRootState> = {
 };
 
 // Actions
-const actions: ActionTree<IUserState, IRootState> = {
+const actions = {
   async login({ commit }, { fbAuth }) {
       //commit('SET_USER', fbAuth);
       commit('SET_TOKEN', fbAuth.accessToken);
   },
 
-  async get({commit}: ActionContext<IUserState, IRootState>) {
+  async get({commit}) {
     try {
       const response = await fetch(API_ENDPOINT + '/api/v1/account', {
         headers: {
@@ -79,7 +64,7 @@ const actions: ActionTree<IUserState, IRootState> = {
       const json = await response.json();
 
       if (response.status >= 200 && response.status < 300) {
-        const payload: IUserState = json;
+        const payload = json;
         commit('SET_USER', payload);
       } else {
         if (json.error) {
@@ -93,26 +78,26 @@ const actions: ActionTree<IUserState, IRootState> = {
     }
   },
 
-  logout({commit}: ActionContext<IUserState, IRootState>) {
+  logout({commit}) {
     commit('UNSET_USER');
   },
 };
 
 // Mutations
-const mutations: MutationTree<IUserState> = {
-  SET_USER(us: IUserState, payload: IUserState) {
+const mutations = {
+  SET_USER(us, payload) {
     us.email = payload.email;
     us.id = payload.id;
     us.name = payload.name;
   },
 
-  SET_TOKEN(us: IUserState, payload) {
-    localStorage.setItem(AUTH_TOKEN, payload as string);
+  SET_TOKEN(us, payload) {
+    localStorage.setItem(AUTH_TOKEN, payload);
 
-    us.token = payload as string;
+    us.token = payload;
   },
 
-  UNSET_USER(us: IUserState) {
+  UNSET_USER(us) {
     localStorage.removeItem(AUTH_TOKEN);
 
     us.email = undefined;
@@ -122,7 +107,7 @@ const mutations: MutationTree<IUserState> = {
   },
 };
 
-export const user: Module<IUserState, IRootState> = {
+export const user = {
   namespaced: true,
   state,
   getters,

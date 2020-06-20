@@ -1,17 +1,29 @@
 <template id="app">
   <v-content>
+    <h1>Locations</h1>
+    <LocationTable
+      :locations="locations"
+    ></LocationTable>
   </v-content>
 </template>
 
 <script lang="ts">
-  import { DeploymentStoreState, IDeployment } from "@/store/modules/deployments"
-  import { EnvironmentStoreState, IEnvironment } from "@/store/modules/environments"
-  import { Component, Vue } from 'vue-property-decorator';
-  import { Action, Getter, State } from 'vuex-class';
-  import { ApplicationStoreState, IApplication } from '../store/modules/applications';
+  import { default as LocationTable } from '../components/LocationTable.vue'
+  import { mapState, mapActions } from 'vuex'
 
-  @Component
-  export default class Dashboard extends Vue {
+  export default{
+    components: {
+      LocationTable,
+    },
+    computed: {
+      ...mapState('locations', ['locations'])
+    },
+    methods: {
+      ...mapActions('locations', ['loadAll']),
+    },
+    beforeMount () {
+      this.loadAll()
+    }
   }
 </script>
 

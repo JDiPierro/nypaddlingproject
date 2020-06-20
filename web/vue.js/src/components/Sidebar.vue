@@ -25,45 +25,34 @@
   </v-navigation-drawer>
 </template>
 
-<script lang="ts">
-import { Component, Emit, Prop, Vue } from 'vue-property-decorator';
-import { Action, Getter, State } from 'vuex-class';
+<script>
+import { mapActions, mapState, mapGetters } from 'vuex';
 
-import { IUserState } from '../store/modules/user';
-
-@Component
-export default class Sidebar extends Vue {
-  @Prop(Boolean) public value!: boolean;
-
-  @Action('logout', { namespace: 'user' }) private logout: any;
-  @Getter('getName', { namespace: 'user' }) private getName!: string;
-  @Getter('getAvatar', { namespace: 'user' }) private getAvatar!: string;
-  @State('user') private user!: IUserState;
-
-  private items = [
-    { title: 'Home', icon: 'dashboard' },
-    { title: 'About', icon: 'question_answer' },
-  ];
-
-  private get drawer(): boolean {
-    return this.value;
-  }
-
-  private set drawer(newVal: boolean) {
-    this.changeValue(newVal);
-  }
-
-  @Emit('input')
-  public changeValue(val: boolean) { /* */ }
-
-  private goTo(path: string) {
-    this.$router.push({ path });
-  }
-
-  private doLogout() {
-    this.drawer = false;
-    this.logout();
-    this.$router.push({ path: '/' });
+export default {
+  props: ["value"],
+  methods: {
+    ...mapActions('user', ['logout']),
+    ...mapGetters('user', ['getName', 'getAvatar']),
+    goTo(path) {
+      this.$router.push({ path });
+    },
+    doLogout() {
+      this.drawer = false;
+      this.logout();
+      this.$router.push({ path: '/' });
+    }
+  },
+  computed: {
+    ...mapState('user', ['user']),
+  },
+  data: () => {
+    return {
+      drawer: false,
+      items: [
+        { title: 'Home', icon: 'dashboard' },
+        { title: 'About', icon: 'question_answer' },
+      ]
+    }
   }
 }
 </script>

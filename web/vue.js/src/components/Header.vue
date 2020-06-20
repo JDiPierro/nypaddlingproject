@@ -2,7 +2,7 @@
   <v-app-bar app color="primary" :clipped-left="$vuetify.breakpoint.lgAndUp" dark>
     <v-toolbar-title class="headline header" @click="goTo('/')">
       <v-app-bar-nav-icon v-if="isAuthenticated === true" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-      <span v-bind:class="{ 'hidden-xs-only': isAuthenticated }">Upstate NY Paddling Project</span>
+      <span v-bind:class="{ 'hidden-xs-only': isAuthenticated === true }">Upstate NY Paddling Project</span>
     </v-toolbar-title>
     <v-spacer></v-spacer>
   </v-app-bar>

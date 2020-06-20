@@ -6,7 +6,6 @@
   >
     <template v-slot:item.link="{ item }">
       <v-btn color="primary" :href="item.link" target="_blank">Go To</v-btn>
-      &nbsp;
       <v-btn color="success">Claim</v-btn>
     </template>
   </v-data-table>

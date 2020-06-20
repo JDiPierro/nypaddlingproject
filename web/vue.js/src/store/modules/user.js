@@ -25,7 +25,7 @@ const state = (() => {
 // Getters
 const getters = {
   isAuthenticated(us) {
-    return !!us.token;
+    return !!us.token || us.token !== "undefined";
   },
 
   getName(us) {

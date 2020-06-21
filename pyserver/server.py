@@ -65,7 +65,7 @@ def find_or_create_user(fbid, name):
     user = found[0]
   else:
     inserted = USERS.insert_one(user)
-    user.id = inserted.inserted_id
+    user['id'] = inserted.inserted_id
 
   return user
 

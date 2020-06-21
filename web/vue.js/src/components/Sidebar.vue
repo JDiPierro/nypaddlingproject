@@ -37,7 +37,7 @@ export default {
       this.$router.push({ path });
     },
     doLogout() {
-      this.drawer = false;
+      this.$emit("input", false)
       this.logout();
       this.$router.push({ path: '/' });
     }

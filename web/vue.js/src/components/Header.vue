@@ -1,10 +1,11 @@
 <template>
   <v-app-bar app color="primary" :clipped-left="$vuetify.breakpoint.lgAndUp" dark>
     <v-toolbar-title class="headline header" @click="goTo('/')">
-      <v-app-bar-nav-icon v-if="isAuthenticated === true" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon v-if="isAuthenticated === true" @click.stop="toggleDrawer"></v-app-bar-nav-icon>
       <span v-bind:class="{ 'hidden-xs-only': isAuthenticated === true }">Upstate NY Paddling Project</span>
     </v-toolbar-title>
     <v-spacer></v-spacer>
+    <v-btn v-if="isAuthenticated === true" @click="doLogout">Logout</v-btn>
   </v-app-bar>
 </template>
 
@@ -13,18 +14,26 @@ import { mapActions, mapGetters } from 'vuex';
 
 export default {
   props: ["value"],
-  methonds: {
+  methods: {
     ...mapActions('user', ['logout']),
-    ...mapGetters('user', ['isAuthenticated']),
-  },
-  calculated: {
+    toggleDrawer: function () {
+      this.$emit('input', !this.value);
+    },
+    doLogout: function() {
+      this.$emit('input', false);
+      this.logout();
+      this.$router.push({ path: '/' });
+    },
     goTo: function(path) {
       this.$router.push({ path });
     },
-    doLogout: function() {
-      this.drawer = false;
-      this.logout();
-      this.$router.push({ path: '/' });
+  },
+  computed: {
+    ...mapGetters('user', ['isAuthenticated'])
+  },
+  data: () => {
+    return {
+      drawer: false
     }
   }
 }

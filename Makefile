@@ -10,7 +10,7 @@ server:
 	python3 pyserver/server.py
 
 dev: dbs
-	cd ./web/vue.js; yarn serve
+	docker-compose up web app
 
 test_ci:
 	echo "TODO: Write Tests..."

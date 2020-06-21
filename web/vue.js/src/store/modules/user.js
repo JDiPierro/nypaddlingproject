@@ -50,15 +50,12 @@ const getters = {
 // Actions
 const actions = {
   async login({ commit, router }) {
-    console.log("in Login action")
     let response = await axios.create({
       baseURL: config.apiUrl
     }).get(`/login`, {
       timeout: 10000
     })
-    console.log("API Response:")
-    console.log(response.data)
-    return response.data
+    commit("SET_TOKEN", { id: response.data.id })
   },
 
   async get({commit}) {
@@ -102,10 +99,10 @@ const mutations = {
     us.name = payload.name;
   },
 
-  SET_TOKEN(us, payload) {
-    localStorage.setItem(AUTH_TOKEN, payload);
+  SET_TOKEN(us, id) {
+    localStorage.setItem(AUTH_TOKEN, id);
 
-    us.token = payload;
+    us.token = id;
   },
 
   UNSET_USER(us) {

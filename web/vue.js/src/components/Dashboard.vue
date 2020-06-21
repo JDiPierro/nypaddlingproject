@@ -1,10 +1,10 @@
 <template id="app">
-  <v-content>
+  <v-main>
     <h1>Locations</h1>
     <LocationTable
       :locations="locations"
     ></LocationTable>
-  </v-content>
+  </v-main>
 </template>
 
 <script lang="ts">

@@ -1,7 +1,7 @@
 
 <template>
   <div>
-    <v-btn color="primary" @click="logInWithFacebook">Login with Facebook</v-btn>
+    <v-btn color="primary" @click="login">Login with Facebook</v-btn>
   </div>
 </template>
 <script>

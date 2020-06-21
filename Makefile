@@ -6,8 +6,10 @@ vue-build:
 serve:
 	cd ./web/vue.js; yarn serve
 
-dev: vue-build
-	docker-compose up -d
+server:
+	python3 pyserver/server.py
+
+dev: dbs
 	cd ./web/vue.js; yarn serve
 
 test_ci:

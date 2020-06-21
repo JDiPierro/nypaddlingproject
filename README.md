@@ -1,6 +1,6 @@
 # NY Paddling Project
 
-The Upstate New York Paddling group is trying to update the information on paddling.com's Go Paddling page/app with as much information as we can on the various launch points in Upstate New York and the surrounding area.
+The New York Paddling group is trying to update the information on paddling.com's Go Paddling page/app with as much information as we can on the various launch points in Upstate New York and the surrounding area.
 
 I was able to use paddling.com's Algolia-powered search to build a list of over 700 launch points in NY and break them down by county.
 

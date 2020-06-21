@@ -11,6 +11,8 @@ async function login () {
   }).get(`/login`, {
     timeout: 4000
   }).then((response) => {
+    console.log(response)
+    debugger
     return response.data
   })
 }

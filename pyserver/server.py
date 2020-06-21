@@ -8,9 +8,13 @@ import gridfs
 import os
 import random
 from datetime import datetime
+import requests
 
 import sentry_sdk
-sentry_sdk.init("https://9029e54585544861aaf3a574c79d0dc4@o410319.ingest.sentry.io/5284155")
+from sentry_sdk.integrations.flask import FlaskIntegration
+sentry_sdk.init(dsn="https://9029e54585544861aaf3a574c79d0dc4@o410319.ingest.sentry.io/5284155",
+                environment=os.environ.get("APP_ENV", "local"),
+                integrations=[FlaskIntegration()])
 
 #################
 # configuration #
@@ -20,9 +24,8 @@ MONGO_URI = os.environ.get("MONGO_URI", "mongodb://localhost:27017")
 SECRET_KEY = os.environ.get("APP_SECRET_KEY", "omgwtfbbqdontguessthis")
 FACEBOOK_APP_ID = os.environ.get("FB_APP_ID")
 FACEBOOK_APP_SECRET = os.environ.get("FB_APP_SECRET")
-APP_PROTOCOL = os.environ.get("APP_PROTOCOL", "http")
+APP_PROTOCOL = os.environ.get("APP_PROTOCOL", "https")
 APP_DOMAIN = os.environ.get("APP_DOMAIN", "localhost:8080")
-DIST_PATH = os.environ.get("DIST_PATH", "../web/vue.js/dist")
 
 #################
 # setup the app #
@@ -31,7 +34,9 @@ app = Flask(__name__)
 app.debug = DEBUG
 app.secret_key = SECRET_KEY
 app.config.from_object(__name__)
+app.config['SERVER_NAME'] = APP_DOMAIN
 app.config['MONGO_URI'] = MONGO_URI
+app.config['PREFERRED_URL_SCHEME'] = APP_PROTOCOL
 
 ########
 # Auth #
@@ -72,6 +77,7 @@ def find_or_create_user(fbid, name):
 
 @app.route('/api/ping', methods=['GET'])
 def ping_pong():
+  requests.get("http://echo")
   return jsonify('pong!')
 
 
@@ -107,7 +113,7 @@ def save():
 @app.route('/api/locations', methods=['GET'])
 def load_locations():
   if not facebook.authorized:
-    return redirect(url_for("facebook.login"))
+    return redirect(url_for("facebook.login", _external=True, _scheme='https'))
   itemcursor = LOCATIONS.find()
 
   return _resolve_items(itemcursor)
@@ -116,6 +122,8 @@ def load_locations():
 def _strid(it):
   if it.get('_id'):
     it['_id'] = str(it['_id'])
+  if it.get('id'):
+    it['id'] = str(it['id'])
   return it
 
 

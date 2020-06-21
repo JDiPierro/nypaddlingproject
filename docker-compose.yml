@@ -18,10 +18,20 @@ services:
   ################
   # Our services #
   ################
+  web:
+    build:
+      context: .
+      target: vue
+    image: nypaddlingproject-web
+    command: "yarn serve"
+    volumes:
+      - ./web/vue.js:/app
+
   app:
     build:
       context: .
       target: build-server
+    hostname: nypaddledev.com
     image: nypaddlingproject
     ports:
       - "80:80"
@@ -32,13 +42,20 @@ services:
       # Mount our local codebase over the codebase baked into the image.
       # Restarting the container will run your local code, no need to rebuild.
       - ./pyserver/server.py:/app/server.py
-      - ./web/vue.js/dist:/app/dist
       - ./nginx/nginx-dev.conf:/etc/nginx/conf.d/default.conf
       - ./nginx/certs:/etc/nginx/certs
     environment:
+      FLASK_ENV: development
       FLASK_DEBUG: 1
-      BASE_URL: "https://nypaddledev.com"
+      BASE_URL: "nypaddledev.com"
       APP_PROTOCOL: "https"
+      APP_DOMAIN: nypaddledev.com
+      PREFERRED_URL_SCHEME: https
+      OAUTHLIB_INSECURE_TRANSPORT: "1"
+      MONGO_URI: mongodb://mongo:27017
+
+  echo:
+    image: mendhak/http-https-echo
 
 volumes:
   data:

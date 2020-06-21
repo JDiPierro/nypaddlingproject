@@ -8,6 +8,7 @@ This application is going to be our tool to track who's working on what, what's 
 
 # Idea List
 - Sign in with Facebook
+    - Limit contributions to members of the Upstate NY Kayaking group
 - Display the list of locations, searchable by County
 - Allow users to "Claim" a location that they plan to scout
 - Once a user has updated an entry they mark it Complete - Pending Verification

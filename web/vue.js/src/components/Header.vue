@@ -15,9 +15,9 @@ export default {
   props: ["value"],
   methonds: {
     ...mapActions('user', ['logout']),
+    ...mapGetters('user', ['isAuthenticated']),
   },
   calculated: {
-    ...mapGetters('user', ['isAuthenticated']),
     goTo: function(path) {
       this.$router.push({ path });
     },

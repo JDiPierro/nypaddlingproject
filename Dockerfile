@@ -1,5 +1,5 @@
 # Build the frontend so we can serve it statically
-FROM node:14.4.0-alpine as build-vue
+FROM node:14.4.0-alpine as vue
 
 WORKDIR /app
 
@@ -9,6 +9,9 @@ COPY ./web/vue.js/package*.json ./
 RUN yarn install
 
 COPY ./web/vue.js .
+
+FROM vue as build-vue
+
 RUN yarn build
 
 # Build the Server image

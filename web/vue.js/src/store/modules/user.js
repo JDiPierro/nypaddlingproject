@@ -3,6 +3,8 @@ import md5 from 'md5';
 
 import { API_ENDPOINT, AUTH_TOKEN } from '../../constants';
 import { userService } from "../services"
+import axios from "axios"
+import config from 'config'
 
 // Initial State
 const state = (() => {
@@ -25,7 +27,10 @@ const state = (() => {
 // Getters
 const getters = {
   isAuthenticated(us) {
-    return !!us.token || us.token !== "undefined";
+    console.log("TOKEN: ", us.token)
+    const result = us.token !== undefined && us.token !== "undefined";
+    console.log(result)
+    return result;
   },
 
   getName(us) {
@@ -44,9 +49,16 @@ const getters = {
 
 // Actions
 const actions = {
-  async login({ commit }, { fbAuth }) {
-      //commit('SET_USER', fbAuth);
-      commit('SET_TOKEN', user.id);
+  async login({ commit, router }) {
+    console.log("in Login action")
+    let response = await axios.create({
+      baseURL: config.apiUrl
+    }).get(`/login`, {
+      timeout: 10000
+    })
+    console.log("API Response:")
+    console.log(response.data)
+    return response.data
   },
 
   async get({commit}) {

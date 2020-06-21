@@ -1,5 +1,5 @@
 # build
-FROM node:11.12.0-alpine as build-vue
+FROM node:14.4.0-alpine as build-vue
 
 WORKDIR /app
 

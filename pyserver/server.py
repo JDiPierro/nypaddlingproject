@@ -78,7 +78,7 @@ def ping_pong():
 @app.route('/api/login', methods=['GET'])
 def login():
   if not facebook.authorized:
-    return redirect(url_for("facebook.login"))
+    return redirect(url_for("facebook.login", _external=True, _scheme='https'))
 
   me = facebook.get('/me').json()
   user = find_or_create_user(me['id'], me['name'])

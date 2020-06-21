@@ -1,4 +1,4 @@
-# build
+# Build the frontend so we can serve it statically
 FROM node:14.4.0-alpine as build-vue
 
 WORKDIR /app
@@ -11,8 +11,8 @@ RUN yarn install
 COPY ./web/vue.js .
 RUN yarn build
 
-# production
-FROM nginx:stable-alpine as production
+# Build the Server image
+FROM nginx:stable-alpine as build-server
 
 WORKDIR /app
 
@@ -34,6 +34,10 @@ RUN pip install gunicorn
 
 COPY ./pyserver .
 
-CMD gunicorn -b 0.0.0.0:5000 app:app --daemon && \
+CMD nginx && gunicorn -b 0.0.0.0:5000 server:app --reload
+
+FROM build-server as heroku
+
+CMD gunicorn -b 0.0.0.0:5000 server:app --daemon && \
           sed -i -e 's/$PORT/'"$PORT"'/g' /etc/nginx/conf.d/default.conf && \
           nginx -g 'daemon off;'

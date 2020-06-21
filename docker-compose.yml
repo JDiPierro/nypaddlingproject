@@ -21,9 +21,11 @@ services:
   app:
     build:
       context: .
+      target: build-server
     image: nypaddlingproject
     ports:
-      - "8080:8080"
+      - "80:80"
+      - "443:443"
     depends_on:
       - mongo
     volumes:
@@ -31,11 +33,12 @@ services:
       # Restarting the container will run your local code, no need to rebuild.
       - ./pyserver/server.py:/app/server.py
       - ./web/vue.js/dist:/app/dist
-      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/nginx-dev.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/certs:/etc/nginx/certs
     environment:
-      PORT: 8080
-      BASE_URL: "localhost:8080"
-      DIST_PATH: "./dist"
+      FLASK_DEBUG: 1
+      BASE_URL: "https://nypaddledev.com"
+      APP_PROTOCOL: "https"
 
 volumes:
   data:

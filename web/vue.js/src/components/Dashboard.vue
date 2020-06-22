@@ -1,6 +1,10 @@
 <template id="app">
   <v-main>
     <v-container>
+      <v-alert type="warning" prominent>
+        <h2>Under Construction!</h2>
+        There's not much here right now but check back later to find out how you can help!
+      </v-alert>
       <h1>Locations</h1>
       <LocationTable
         :locations="locations"

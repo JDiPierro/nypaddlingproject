@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, redirect, url_for, request
+from flask import Flask, jsonify, redirect, url_for, request, abort
 from flask_dance.contrib.facebook import make_facebook_blueprint, facebook
 from flask_cors import CORS
 from flask_pymongo import PyMongo
@@ -46,7 +46,7 @@ blueprint = make_facebook_blueprint(
   scope="email"
 )
 app.register_blueprint(blueprint, url_prefix="/api/login")
-CORS(app, resources={r'/*': {'origins': '*'}})
+CORS(app, resources={r'/api/login*': {'origins': '*'}})
 
 #########
 # Mongo #
@@ -89,13 +89,19 @@ def ping_pong():
 
 
 @app.route('/api/login', methods=['GET'])
-@login_required
 def login():
+  return redirect(url_for("facebook.login", _external=True, _scheme='https'))
+
+
+@app.route('/api/me', methods=['GET'])
+def me():
+  if not facebook.authorized:
+    return abort(404)
+
   me = facebook.get('/me').json()
   user = find_or_create_user(me['id'], me['name'])
 
   return jsonify(_strid(user))
-
 
 ##############################
 # Paddling Application Logic #

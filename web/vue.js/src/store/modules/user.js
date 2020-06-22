@@ -27,10 +27,7 @@ const state = (() => {
 // Getters
 const getters = {
   isAuthenticated(us) {
-    console.log("TOKEN: ", us.token)
-    const result = us.token !== undefined && us.token !== "undefined";
-    console.log(result)
-    return result;
+    return us.token !== undefined && us.token !== "undefined";
   },
 
   getName(us) {
@@ -50,12 +47,28 @@ const getters = {
 // Actions
 const actions = {
   async login({ commit, router }) {
+    window.location = "/api/login"
+    /*
     let response = await axios.create({
       baseURL: config.apiUrl
     }).get(`/login`, {
       timeout: 10000
+    }).then(function (response) {
+
     })
-    commit("SET_TOKEN", { id: response.data.id })
+    commit("SET_TOKEN", { id: response.data.id })*/
+  },
+
+  async me({commit}) {
+    return await axios.create({
+      baseURL: config.apiUrl
+    }).get(`/me`, {
+      timeout: 4000
+    }).then((response) => {
+      console.log(response)
+      commit("SET_TOKEN", { id: response.data.id })
+      return response.data
+    })
   },
 
   async get({commit}) {

@@ -1,7 +1,7 @@
 
 <template>
   <div>
-    <v-btn color="primary" @click="login">Login with Facebook</v-btn>
+    <v-btn color="primary" @click="logInWithFacebook">Login with Facebook</v-btn>
   </div>
 </template>
 <script>
@@ -12,14 +12,7 @@
     methods: {
       ...mapActions('user', ['login']),
       async logInWithFacebook() {
-        let self = this;
-        await window.FB.login(function(response) {
-          if (response.authResponse) {
-            self.login({ fbAuth: response.authResponse })
-          } else {
-            alert("Facebook login failed...");
-          }
-        });
+        window.location = "/api/login"
       },
       async initFacebook() {
         window.fbAsyncInit = function() {

@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 import Header from './components/Header.vue';
 import Sidebar from './components/Sidebar.vue';
@@ -25,6 +25,12 @@ export default {
   },
   computed: {
     ...mapGetters('user', ['isAuthenticated'])
+  },
+  methods: {
+    ...mapActions('user', ['me'])
+  },
+  beforeMount() {
+    this.me()
   },
   data: () => {
     return {

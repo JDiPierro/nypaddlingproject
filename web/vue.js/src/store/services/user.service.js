@@ -16,3 +16,14 @@ async function login () {
     return response.data
   })
 }
+
+async function getMe() {
+  return await axios.create({
+    baseURL: config.apiUrl
+  }).get(`/me`, {
+    timeout: 4000
+  }).then((response) => {
+    console.log(response)
+    return response.data
+  })
+}

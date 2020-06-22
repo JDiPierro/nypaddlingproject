@@ -18,7 +18,12 @@ with open("./locations.json") as locationjson:
   data = json.load(locationjson)
 
 for location in data:
-  found = LOCATIONS.find({'name': location['name']})
+  if location.get("county") == None:
+    continue
+
+  location['paddling_id'] = location['paddlingid']
+  del location['paddlingid']
+  found = LOCATIONS.find({'paddling_id': location['paddling_id']})
   if found.count() > 0:
     print(f"Duplicate discarded: {location['name']}")
 

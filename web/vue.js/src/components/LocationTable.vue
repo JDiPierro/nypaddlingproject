@@ -28,6 +28,9 @@
     :items="locations"
     :search="searchFilter"
   >
+    <template v-slot:item.name="{ item }">
+      <h2>{{item.name}}</h2>
+    </template>
     <template v-slot:item.link="{ item }">
       <v-btn color="primary" :href="item.link" target="_blank">Paddling.com</v-btn>
       &nbsp;
@@ -51,6 +54,7 @@
           {
             text: 'County',
             value: 'county',
+            width: 200,
             filter: (value, search, item) => {
               if (!this.selectedCounty) {
                 return true
@@ -58,11 +62,11 @@
               return item.county === this.selectedCounty
             }
           },
-          { text: 'Created At', value: 'created_at', filterable: false },
-          { text: 'Updated At', value: 'updated_at', filterable: false },
-          { text: 'Description Length', value: 'desc_len', filterable: false },
-          { text: 'Num Photos', value: 'num_photos', filterable: false },
-          { text: 'Links', value: 'link', sortable: false, filterable: false },
+          { text: 'Created At', value: 'created_at', filterable: false, width: 150 },
+          { text: 'Updated At', value: 'updated_at', filterable: false, width: 150 },
+          { text: 'Description Length', value: 'desc_len', filterable: false, width: 50 },
+          { text: 'Num Photos', value: 'num_photos', filterable: false, width: 50 },
+          { text: 'Links', value: 'link', sortable: false, filterable: false, width: 350 },
         ]
       }
     },

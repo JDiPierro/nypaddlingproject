@@ -5,7 +5,6 @@
       <span v-bind:class="{ 'hidden-xs-only': isAuthenticated === true }">Upstate NY Paddling Project</span>
     </v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-btn v-if="isAuthenticated === true" @click="doLogout">Logout</v-btn>
   </v-app-bar>
 </template>
 

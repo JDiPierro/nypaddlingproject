@@ -2,9 +2,7 @@
   <v-app>
     <Sidebar v-if="isAuthenticated === true" v-model="drawer" />
     <Header v-model="drawer" />
-      <v-container fluid>
-        <router-view></router-view>
-      </v-container>
+    <router-view></router-view>
   </v-app>
 </template>
 

@@ -1,8 +1,8 @@
 <template>
   <div>
-    <v-parallax :src="require('../assets/vbanner.jpg')">
+    <v-parallax :src="require('../assets/waterimage2.png')">
       <v-layout class="center-text" align-center column justify-center>
-        <h1 class="display-2 font-weight-thin mb-3">Upstate New York Paddling Project</h1>
+        <h1 class="display-2 font-weight-thick mb-3">Upstate New York Paddling Project</h1>
         <LoginWithFB/>
       </v-layout>
     </v-parallax>

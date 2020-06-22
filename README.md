@@ -16,6 +16,8 @@ This application is going to be our tool to track who's working on what, what's 
 - An admin verifies the update was real and high quality.
 - The admin awards the user with points based on the quality of the report (5, 10, 15?)
 - Display a leaderboard of who has the most points
+- Add the location scraping code to this repo.
+    - Pull in the Paddling.com location ID and slug
 
 # Data models:
 

@@ -46,6 +46,7 @@ blueprint = make_facebook_blueprint(
   scope="email"
 )
 app.register_blueprint(blueprint, url_prefix="/api/login")
+CORS(app, resources={r'/api/login*': {'origins': '*'}})
 
 #########
 # Mongo #
@@ -54,11 +55,6 @@ mongo = PyMongo(app)
 DB = mongo.cx.nypaddlingproject
 LOCATIONS = DB.locations
 USERS = DB.users
-
-
-# enable CORS
-# TODO: Can I disable this in production without breaking things?
-CORS(app, resources={r'/*': {'origins': '*'}})
 
 
 def login_required(f):

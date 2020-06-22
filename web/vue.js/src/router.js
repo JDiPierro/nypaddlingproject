@@ -12,6 +12,7 @@ const router = new Router({
   base: process.env.BASE_URL,
   routes: [
     {path: '/', name: 'home', component: () => import(/* webpackChunkName: "home" */ './views/Home.vue')},
+    {path: '/privacy', name: 'privacy', component: () => import(/* webpackChunkName: "privacy" */ './views/Privacy.vue')},
 
     {path: '/404', alias: '*', name: 'notfound', component: () => import(/* webpackChunkName: "notfound" */ './views/NotFound.vue')},
   ],

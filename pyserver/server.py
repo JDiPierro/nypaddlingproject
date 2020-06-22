@@ -89,7 +89,7 @@ def ping_pong():
 
 
 @app.route('/api/login', methods=['GET'])
-def login():
+def login_redirect():
   return redirect(url_for("facebook.login", _external=True, _scheme='https'))
 
 

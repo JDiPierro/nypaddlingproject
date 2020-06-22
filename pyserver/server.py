@@ -2,26 +2,25 @@ from flask import Flask, jsonify, redirect, url_for, request
 from flask_dance.contrib.facebook import make_facebook_blueprint, facebook
 from flask_cors import CORS
 from flask_pymongo import PyMongo
-from pymongo import MongoClient
-from bson.objectid import ObjectId
-import gridfs
 import os
-import random
-from datetime import datetime
-import requests
-
+from functools import wraps
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
+
+
+###################
+# Error Reporting #
+###################
 sentry_sdk.init(dsn="https://9029e54585544861aaf3a574c79d0dc4@o410319.ingest.sentry.io/5284155",
                 environment=os.environ.get("APP_ENV", "local"),
                 integrations=[FlaskIntegration()])
 
 #################
-# configuration #
+# Configuration #
 #################
-DEBUG = True
-MONGO_URI = os.environ.get("MONGO_URI", "mongodb://localhost:27017")
-SECRET_KEY = os.environ.get("APP_SECRET_KEY", "omgwtfbbqdontguessthis")
+DEBUG = os.environ.get("FLASK_DEBUG", False)
+MONGO_URI = os.environ.get("MONGO_URI", "mongodb://mongo:27017")
+SECRET_KEY = os.environ.get("APP_SECRET_KEY", "omgwtfbbqplzdontguessthis")
 FACEBOOK_APP_ID = os.environ.get("FB_APP_ID")
 FACEBOOK_APP_SECRET = os.environ.get("FB_APP_SECRET")
 APP_PROTOCOL = os.environ.get("APP_PROTOCOL", "https")
@@ -48,15 +47,28 @@ blueprint = make_facebook_blueprint(
 )
 app.register_blueprint(blueprint, url_prefix="/api/login")
 
-# Mongo
+#########
+# Mongo #
+#########
 mongo = PyMongo(app)
-
-# enable CORS
-CORS(app, resources={r'/*': {'origins': '*'}})
-
 DB = mongo.cx.nypaddlingproject
 LOCATIONS = DB.locations
 USERS = DB.users
+
+
+# enable CORS
+# TODO: Can I disable this in production without breaking things?
+CORS(app, resources={r'/*': {'origins': '*'}})
+
+
+def login_required(f):
+  @wraps(f)
+  def decorator(*args, **kwargs):
+    if not facebook.authorized:
+      return redirect(url_for("facebook.login", _external=True, _scheme='https'))
+    return f(*args, **kwargs)
+
+  return decorator
 
 
 def find_or_create_user(fbid, name):
@@ -77,19 +89,17 @@ def find_or_create_user(fbid, name):
 
 @app.route('/api/ping', methods=['GET'])
 def ping_pong():
-  requests.get("http://echo")
   return jsonify('pong!')
 
 
 @app.route('/api/login', methods=['GET'])
+@login_required
 def login():
-  if not facebook.authorized:
-    return redirect(url_for("facebook.login", _external=True, _scheme='https'))
-
   me = facebook.get('/me').json()
   user = find_or_create_user(me['id'], me['name'])
 
   return jsonify(_strid(user))
+
 
 ##############################
 # Paddling Application Logic #
@@ -111,9 +121,8 @@ def save():
 
 
 @app.route('/api/locations', methods=['GET'])
+@login_required
 def load_locations():
-  if not facebook.authorized:
-    return redirect(url_for("facebook.login", _external=True, _scheme='https'))
   itemcursor = LOCATIONS.find()
 
   return _resolve_items(itemcursor)

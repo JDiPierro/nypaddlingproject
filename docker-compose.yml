@@ -22,6 +22,7 @@ services:
     build:
       context: .
       target: vue
+    restart: always
     image: nypaddlingproject-web
     command: "yarn serve"
     volumes:
@@ -33,6 +34,7 @@ services:
       target: build-server
     hostname: nypaddledev.com
     image: nypaddlingproject
+    restart: always
     ports:
       - "80:80"
       - "443:443"
@@ -53,9 +55,6 @@ services:
       PREFERRED_URL_SCHEME: https
       OAUTHLIB_INSECURE_TRANSPORT: "1"
       MONGO_URI: mongodb://mongo:27017
-
-  echo:
-    image: mendhak/http-https-echo
 
 volumes:
   data:

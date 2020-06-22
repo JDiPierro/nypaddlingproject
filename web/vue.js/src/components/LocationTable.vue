@@ -5,7 +5,8 @@
     :items="locations"
   >
     <template v-slot:item.link="{ item }">
-      <v-btn color="primary" :href="item.link" target="_blank">Go To</v-btn>
+      <v-btn color="primary" :href="item.link" target="_blank">Paddling.com</v-btn>
+      &nbsp;
       <v-btn color="success">Claim</v-btn>
     </template>
   </v-data-table>
@@ -25,7 +26,7 @@
           { text: 'Updated At', value: 'updated_at' },
           { text: 'Description Length', value: 'desc_len' },
           { text: 'Num Photos', value: 'num_photos' },
-          { text: 'Link', value: 'link', sortable: false },
+          { text: 'Links', value: 'link', sortable: false },
         ],
       }
     }

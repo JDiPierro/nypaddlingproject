@@ -1,9 +1,11 @@
 <template id="app">
   <v-main>
-    <h1>Locations</h1>
-    <LocationTable
-      :locations="locations"
-    ></LocationTable>
+    <v-container>
+      <h1>Locations</h1>
+      <LocationTable
+        :locations="locations"
+      ></LocationTable>
+    </v-container>
   </v-main>
 </template>
 

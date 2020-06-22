@@ -4,6 +4,12 @@ const state = {
   locations: [],
 };
 
+const getters = {
+  counties: state => {
+    return [...new Set(state.locations.map(item => item.county))].sort();
+  }
+}
+
 const actions = {
   loadAll ({ commit, dispatch }) {
     locationService.load().then((locations) => {
@@ -23,6 +29,7 @@ const mutations = {
 export const locations = {
   namespaced: true,
   state,
+  getters,
   actions,
   mutations
 };

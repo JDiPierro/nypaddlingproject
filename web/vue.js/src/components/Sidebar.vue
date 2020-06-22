@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer :clipped="$vuetify.breakpoint.lgAndUp" v-model="drawer" fixed app disable-resize-watcher>
+  <v-navigation-drawer :clipped="$vuetify.breakpoint.lgAndUp" v-model="value" fixed app disable-resize-watcher>
 
     <v-list dense>
       <v-list-item @click="goTo('/')">
@@ -47,7 +47,6 @@ export default {
   },
   data: () => {
     return {
-      drawer: false,
       items: [
         { title: 'Home', icon: 'dashboard' },
         { title: 'About', icon: 'question_answer' },

@@ -54,7 +54,7 @@
           {
             text: 'County',
             value: 'county',
-            width: 200,
+            width: 100,
             filter: (value, search, item) => {
               if (!this.selectedCounty) {
                 return true

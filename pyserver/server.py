@@ -46,7 +46,7 @@ blueprint = make_facebook_blueprint(
   scope="email"
 )
 app.register_blueprint(blueprint, url_prefix="/api/login")
-CORS(app, resources={r'/api/login*': {'origins': '*'}})
+CORS(app, resources={r'/*': {'origins': '*'}})
 
 #########
 # Mongo #

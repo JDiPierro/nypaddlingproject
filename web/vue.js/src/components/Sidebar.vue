@@ -10,6 +10,14 @@
           <v-list-item-title>Home</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
+      <v-list-item @click="goTo('/locations')">
+        <v-list-item-action>
+          <v-icon>mdi-map-marker</v-icon>
+        </v-list-item-action>
+        <v-list-item-content>
+          <v-list-item-title>Locations</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
     </v-list>
 
     <v-divider></v-divider>

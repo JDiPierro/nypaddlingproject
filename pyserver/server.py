@@ -81,7 +81,7 @@ def find_or_create_user(fbid, name):
 
   found = USERS.find_one({'fbid': user['fbid']})
   if found is not None:
-    user = found[0]
+    user = found
   else:
     inserted = USERS.insert_one(user)
     user['id'] = inserted.inserted_id
@@ -175,11 +175,41 @@ def claim_location(location_id):
   return jsonify(str(inserted.inserted_id))
 
 
+@app.route('/api/me/claims', methods=['GET'])
+@login_required
+def user_claims():
+  user = session.get("user")
+  if user is None or user.get("_id") is None:
+    return abort(400, "User not found in session")
+
+  app.logger.info(f"Looking up claims for {user['_id']}")
+
+  claims = [claim for claim in CLAIMS.find({"user_id": user['_id']})]
+  claimed_locations = [ObjectId(claim['location_id']) for claim in claims]
+  app.logger.info(f"found {len(claims)}")
+
+  locations = [loc for loc in LOCATIONS.find({"_id": {"$in": claimed_locations}})]
+  locs_by_id = {str(loc["_id"]): loc for loc in locations}
+
+  app.logger.info(f"locations loaded {len(locations)}")
+
+  full_claims = []
+  for claim in claims:
+    app.logger.info(f"claim")
+    claimed_loc = locs_by_id.get(claim['location_id'], {})
+    claim['location'] = claimed_loc
+    full_claims.append(claim)
+
+  return _resolve_items(full_claims)
+
+
 def _strid(it):
   if it.get('_id'):
     it['_id'] = str(it['_id'])
   if it.get('id'):
     it['id'] = str(it['id'])
+  if it.get('location'):
+    it['location']['_id'] = str(it['location']['_id'])
   return it
 
 

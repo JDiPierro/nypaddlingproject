@@ -2,7 +2,8 @@ import axios from 'axios'
 import config from 'config'
 
 export const userService = {
-  login
+  login,
+  loadUser,
 };
 
 async function login () {
@@ -11,13 +12,11 @@ async function login () {
   }).get(`/login`, {
     timeout: 4000
   }).then((response) => {
-    console.log(response)
-    debugger
     return response.data
   })
 }
 
-async function getMe() {
+async function loadUser() {
   return await axios.create({
     baseURL: config.apiUrl
   }).get(`/me`, {

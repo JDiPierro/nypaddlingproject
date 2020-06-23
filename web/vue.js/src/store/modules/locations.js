@@ -2,6 +2,7 @@ import { locationService } from '../services'
 
 const state = {
   locations: [],
+  user_claims: []
 };
 
 const getters = {
@@ -11,9 +12,16 @@ const getters = {
 }
 
 const actions = {
-  loadAll ({ commit, dispatch }) {
-    locationService.load().then((locations) => {
+  async loadAll ({ commit, dispatch }) {
+    await locationService.load().then((locations) => {
       commit('load', locations)
+    }).catch(() => {
+      dispatch('alert/error', 'Unable to communicate with server...', {root:true})
+    })
+  },
+  async loadClaims ({ commit, dispatch }) {
+    await locationService.loadClaims().then((claims) => {
+      commit('loadClaims', claims)
     }).catch(() => {
       dispatch('alert/error', 'Unable to communicate with server...', {root:true})
     })
@@ -37,6 +45,9 @@ const actions = {
 const mutations = {
   load (state, locations) {
     state.locations = locations
+  },
+  loadClaims (state, claims) {
+    state.user_claims = claims
   },
 };
 

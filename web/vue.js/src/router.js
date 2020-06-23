@@ -11,10 +11,27 @@ const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
-    {path: '/', name: 'home', component: () => import(/* webpackChunkName: "home" */ './views/Home.vue')},
-    {path: '/privacy', name: 'privacy', component: () => import(/* webpackChunkName: "privacy" */ './views/Privacy.vue')},
-
-    {path: '/404', alias: '*', name: 'notfound', component: () => import(/* webpackChunkName: "notfound" */ './views/NotFound.vue')},
+    {
+      path: '/',
+      name: 'home',
+      component: () => import(/* webpackChunkName: "home" */ './views/Home.vue')
+    },
+    {
+      path: '/privacy',
+      name: 'privacy',
+      component: () => import(/* webpackChunkName: "privacy" */ './views/Privacy.vue')
+    },
+    {
+      path: '/locations',
+      name: 'locations',
+      component: () => import(/* webpackChunkName: "locations" */ './views/Locations.vue')
+    },
+    {
+      path: '/404',
+      alias: '*',
+      name: 'notfound',
+      component: () => import(/* webpackChunkName: "notfound" */ './views/NotFound.vue')
+    },
   ],
 });
 

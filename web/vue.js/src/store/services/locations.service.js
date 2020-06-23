@@ -4,6 +4,7 @@ import config from 'config'
 export const locationService = {
   load,
   claim,
+  loadClaims,
   details
 };
 
@@ -22,6 +23,16 @@ async function claim(location_id) {
     baseURL: config.apiUrl
   }).post(`/locations/${location_id}/claim`, {}, {
     timeout: 10000
+  }).then((response) => {
+    return response.data
+  })
+}
+
+async function loadClaims () {
+  return await axios.create({
+    baseURL: config.apiUrl
+  }).get(`/me/claims`, {
+    timeout: 4000
   }).then((response) => {
     return response.data
   })

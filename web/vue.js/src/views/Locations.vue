@@ -5,38 +5,30 @@
         <h2>Under Construction!</h2>
         There's not much here right now but check back later to find out how you can help!
       </v-alert>
-      <h1>Claimed Locations</h1>
-      <v-list>
-        <v-list-item
-          v-for="claim in user_claims"
-        >
-          <ClaimedLocationCard
-            :claim="claim"
-          ></ClaimedLocationCard>
-        </v-list-item>
-      </v-list>
+      <h1>Locations</h1>
+      <LocationTable
+        :locations="locations"
+      ></LocationTable>
     </v-container>
   </v-main>
 </template>
 
-<script>
+<script lang="ts">
   import { default as LocationTable } from '../components/LocationTable.vue'
   import { mapState, mapActions } from 'vuex'
-  import ClaimedLocationCard from "./ClaimedLocationCard"
 
   export default{
     components: {
-      ClaimedLocationCard,
       LocationTable,
     },
     computed: {
-      ...mapState('locations', ['user_claims'])
+      ...mapState('locations', ['locations'])
     },
     methods: {
-      ...mapActions('locations', ['loadClaims']),
+      ...mapActions('locations', ['loadAll']),
     },
     beforeMount () {
-      this.loadClaims()
+      this.loadAll()
     }
   }
 </script>

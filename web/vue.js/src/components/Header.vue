@@ -1,8 +1,8 @@
 <template>
   <v-app-bar app color="primary" :clipped-left="$vuetify.breakpoint.lgAndUp" dark>
-    <v-toolbar-title class="headline header" @click="goTo('/')">
+    <v-toolbar-title class="headline header">
       <v-app-bar-nav-icon v-if="isAuthenticated === true" @click="toggleDrawer()"></v-app-bar-nav-icon>
-      <span v-bind:class="{ 'hidden-xs-only': isAuthenticated === true }">Upstate NY Paddling Project</span>
+      <span @click="goTo('/')" v-bind:class="{ 'hidden-xs-only': isAuthenticated === true }">Upstate NY Paddling Project</span>
     </v-toolbar-title>
     <v-spacer></v-spacer>
   </v-app-bar>
@@ -17,7 +17,6 @@ export default {
     ...mapActions('user', ['logout']),
     toggleDrawer: function () {
       let newValue = !this.value
-      console.log("Emitting drawer change to ", newValue)
       this.$emit('input', newValue);
     },
     doLogout: function() {

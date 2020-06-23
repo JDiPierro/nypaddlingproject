@@ -8,6 +8,7 @@ module.exports = {
     }
   },
   devServer: {
-    disableHostCheck: true
+    disableHostCheck: true,
+    proxy: 'https://nypaddledev.com'
   }
 }

@@ -1,7 +1,9 @@
-from flask import Flask, jsonify, redirect, url_for, request, abort
+from flask import Flask, jsonify, redirect, url_for, request, abort, session
 from flask_dance.contrib.facebook import make_facebook_blueprint, facebook
 from flask_cors import CORS
 from flask_pymongo import PyMongo
+from bson import ObjectId
+from datetime import datetime
 import os
 from functools import wraps
 import sentry_sdk
@@ -55,6 +57,7 @@ mongo = PyMongo(app)
 DB = mongo.cx.nypaddlingproject
 LOCATIONS = DB.locations
 USERS = DB.users
+CLAIMS = DB.location_claims
 
 
 def login_required(f):
@@ -71,10 +74,13 @@ def find_or_create_user(fbid, name):
   user = {
     'fbid': fbid,
     'name': name,
+    "created_at": datetime.now(),
+    "updated_at": datetime.now(),
+    "role": "user"
   }
 
-  found = USERS.find({'fbid': user['fbid']})
-  if found.count() > 0:
+  found = USERS.find_one({'fbid': user['fbid']})
+  if found is not None:
     user = found[0]
   else:
     inserted = USERS.insert_one(user)
@@ -100,8 +106,14 @@ def me():
 
   me = facebook.get('/me').json()
   user = find_or_create_user(me['id'], me['name'])
+  login(user)
 
   return jsonify(_strid(user))
+
+
+def login(user):
+  session['user'] = user
+
 
 ##############################
 # Paddling Application Logic #
@@ -112,8 +124,8 @@ def me():
 def save():
   location = request.json
 
-  found = LOCATIONS.find({'name': location['name']})
-  if found.count() > 0:
+  found = LOCATIONS.find_one({'name': location['name']})
+  if found is None:
     print(f"Duplicate discarded: {location['name']}")
     return jsonify("Already Exists")
 
@@ -130,12 +142,49 @@ def load_locations():
   return _resolve_items(itemcursor)
 
 
+@app.route('/api/locations/<location_id>', methods=['GET'])
+@login_required
+def location_details(location_id):
+  location = LOCATIONS.find_one({"_id": ObjectId(location_id)})
+
+  claims = CLAIMS.find({"location_id": location["_id"]})
+  location['claims'] = claims
+
+  return _resolve(location)
+
+
+@app.route('/api/locations/<location_id>/claim', methods=['POST'])
+@login_required
+def claim_location(location_id):
+  user = session.get("user")
+  if user is None or user.get("_id") is None:
+    return abort(400, "User not found in session")
+
+  location = LOCATIONS.find_one({"_id": ObjectId(location_id)})
+  if location is None:
+    return abort(404, f"Location  doesn't exist")
+
+  inserted = CLAIMS.insert_one({
+    "location_id": location_id,
+    "user_id": user.get("_id"),
+    "created_at": datetime.now(),
+    "updated_at": datetime.now(),
+    "status": "pending"
+  })
+
+  return jsonify(str(inserted.inserted_id))
+
+
 def _strid(it):
   if it.get('_id'):
     it['_id'] = str(it['_id'])
   if it.get('id'):
     it['id'] = str(it['id'])
   return it
+
+
+def _resolve(item):
+  return jsonify(_strid(item))
 
 
 def _resolve_items(cursor):

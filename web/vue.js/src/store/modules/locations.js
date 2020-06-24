@@ -27,9 +27,9 @@ const actions = {
     })
   },
   async claim({ commit, dispatch }, { location_id }) {
-    await locationService.claim(location_id).then(async () => {
-      dispatch('getDetails', { location_id })
-    }).catch(() => {
+    await locationService.claim(location_id).then(async (new_claim) => {
+      commit('claim', { new_claim })
+    }).catch((e) => {
       dispatch('alert/error', 'Unable to communicate with server...', {root:true})
     })
   },
@@ -45,6 +45,14 @@ const actions = {
 const mutations = {
   load (state, locations) {
     state.locations = locations
+  },
+  claim(state, { new_claim }) {
+    for(const loc of state.locations) {
+      if(loc["_id"] === new_claim['location_id']) {
+        loc["claims"].push(new_claim)
+        break
+      }
+    }
   },
   loadClaims (state, claims) {
     state.user_claims = claims

@@ -34,7 +34,10 @@
     <template v-slot:item.link="{ item }">
       <v-btn color="primary" :href="item.link" target="_blank">Paddling.com</v-btn>
       &nbsp;
-      <v-btn color="success" @click="claim({ location_id: item._id })">Claim</v-btn>
+      <ClaimButton
+        :location_id="item._id"
+        :claims="item.claims"
+      ></ClaimButton>
     </template>
   </v-data-table>
 </div>
@@ -42,12 +45,16 @@
 
 <script>
   import { mapGetters, mapActions } from 'vuex';
+  import { default as ClaimButton } from './ClaimButton';
 
   export default {
     name: "LocationTable",
     props: ["locations"],
+    components: {
+      ClaimButton
+    },
     methods: {
-      ...mapActions('locations',['claim'])
+      ...mapActions('locations',['claim']),
     },
     computed: {
       ...mapGetters('locations', ['counties']),
@@ -71,7 +78,7 @@
           { text: 'Num Photos', value: 'num_photos', filterable: false, width: 50 },
           { text: 'Links', value: 'link', sortable: false, filterable: false, width: 350 },
         ]
-      }
+      },
     },
     data: () => {
       return {

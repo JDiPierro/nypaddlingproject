@@ -8,6 +8,19 @@ import os
 from functools import wraps
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
+import json
+
+
+class JSONEncoder(json.JSONEncoder):
+  def default(self, o):
+    if isinstance(o, ObjectId):
+      return str(o)
+    if isinstance(o, datetime):
+      return o.isoformat()
+    return json.JSONEncoder.default(self, o)
+
+
+JSON = JSONEncoder()
 
 
 ###################
@@ -137,9 +150,26 @@ def save():
 @app.route('/api/locations', methods=['GET'])
 @login_required
 def load_locations():
-  itemcursor = LOCATIONS.find()
+  locations = {loc["_id"]: loc for loc in LOCATIONS.find()}
+  location_ids = [str(it) for it in locations.keys()]
+  claims = [claim for claim in CLAIMS.find({
+    "location_id": {
+      "$in": location_ids
+    }
+  })]
 
-  return _resolve_items(itemcursor)
+  claims_by_loc = {}
+  for claim in claims:
+    loc_claims = claims_by_loc.get(claim['location_id'], [])
+    loc_claims.append(claim)
+    claims_by_loc[claim['location_id']] = loc_claims
+
+  full_locations = []
+  for loc in locations.values():
+    loc['claims'] = claims_by_loc.get(str(loc['_id']), [])
+    full_locations.append(loc)
+
+  return _resolve_items(full_locations)
 
 
 @app.route('/api/locations/<location_id>', methods=['GET'])
@@ -164,15 +194,24 @@ def claim_location(location_id):
   if location is None:
     return abort(404, f"Location  doesn't exist")
 
-  inserted = CLAIMS.insert_one({
+  found = CLAIMS.find_one({
+    "location_id": location_id,
+    "user_id": user.get("_id"),
+  })
+  if found is not None:
+    return abort(400, "You've already claimed this location...")
+
+  new_claim = {
     "location_id": location_id,
     "user_id": user.get("_id"),
     "created_at": datetime.now(),
     "updated_at": datetime.now(),
     "status": "pending"
-  })
+  }
+  inserted = CLAIMS.insert_one(new_claim)
+  new_claim["_id"] = inserted.inserted_id
 
-  return jsonify(str(inserted.inserted_id))
+  return _resolve(new_claim)
 
 
 @app.route('/api/me/claims', methods=['GET'])
@@ -195,7 +234,6 @@ def user_claims():
 
   full_claims = []
   for claim in claims:
-    app.logger.info(f"claim")
     claimed_loc = locs_by_id.get(claim['location_id'], {})
     claim['location'] = claimed_loc
     full_claims.append(claim)
@@ -214,11 +252,11 @@ def _strid(it):
 
 
 def _resolve(item):
-  return jsonify(_strid(item))
+  return JSON.encode(item)
 
 
 def _resolve_items(cursor):
-  return jsonify([_strid(item) for item in cursor])
+  return JSON.encode([item for item in cursor])
 
 
 def done():

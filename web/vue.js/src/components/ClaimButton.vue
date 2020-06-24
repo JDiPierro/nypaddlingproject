@@ -11,6 +11,7 @@
       >
         <v-btn
           color="success"
+          :disabled="claimedByActiveUser()"
           @click="claim({ location_id })"
           v-bind="attrs"
           v-on="on"
@@ -24,13 +25,25 @@
 </template>
 
 <script>
-  import { mapActions } from 'vuex';
+  import { mapActions, mapState } from 'vuex';
 
   export default {
     name: "ClaimButton",
     props: ['location_id', 'claims'],
     methods: {
-      ...mapActions('locations',['claim']),
+      ...mapActions('locations', ['claim']),
+      claimedByActiveUser() {
+        //TODO: Fix user state and this method.
+        for(const claim of this.claims) {
+          if(claim['user_id'] === this.user['_id']) {
+            return true
+          }
+        }
+        return false
+      }
+    },
+    computed: {
+      ...mapState('user', ['user'])
     }
   }
 </script>

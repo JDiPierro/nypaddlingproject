@@ -7,27 +7,14 @@ import axios from "axios"
 import config from 'config'
 
 // Initial State
-const state = (() => {
-  const token = localStorage.getItem(AUTH_TOKEN);
-
-  if (token === null || token === '') {
-    return {
-      email: undefined,
-      id: undefined,
-      name: undefined,
-      token: undefined,
-    };
-  }
-
-  return {
-    token,
-  };
-})();
+const state = {
+  user: null,
+};
 
 // Getters
 const getters = {
   isAuthenticated(us) {
-    return us.token !== undefined && us.token !== "undefined";
+    return us.user !== null
   },
 
   getName(us) {
@@ -47,30 +34,19 @@ const getters = {
 // Actions
 const actions = {
   async login({ commit, router }) {
+    // TODO: Doesn't need to be an action.
     window.location = "/api/login"
-    /*
-    let response = await axios.create({
-      baseURL: config.apiUrl
-    }).get(`/login`, {
-      timeout: 10000
-    }).then(function (response) {
-
-    })
-    commit("SET_TOKEN", { id: response.data.id })*/
   },
 
-  async me({commit}) {
-    return await axios.create({
-      baseURL: config.apiUrl
-    }).get(`/me`, {
-      timeout: 4000
-    }).then((response) => {
-      console.log(response)
-      commit("SET_TOKEN", { id: response.data.id })
-      return response.data
+  async me({ commit, dispatch }) {
+    console.log("In ME action")
+    userService.loadUser().then((me) => {
+      commit('SET_USER', me)
+    }).catch(() => {
+      dispatch('alert/error', 'Unable to communicate with server...', {root:true})
     })
   },
-
+/*
   async get({commit}) {
     try {
       const response = await fetch(API_ENDPOINT + '/api/v1/account', {
@@ -97,7 +73,7 @@ const actions = {
       commit('UNSET_USER');
       throw new Error(err);
     }
-  },
+  },*/
 
   logout({commit}) {
     commit('UNSET_USER');
@@ -106,25 +82,12 @@ const actions = {
 
 // Mutations
 const mutations = {
-  SET_USER(us, payload) {
-    us.email = payload.email;
-    us.id = payload.id;
-    us.name = payload.name;
+  SET_USER(state, payload) {
+    state.user = payload
   },
 
-  SET_TOKEN(us, id) {
-    localStorage.setItem(AUTH_TOKEN, id);
-
-    us.token = id;
-  },
-
-  UNSET_USER(us) {
-    localStorage.removeItem(AUTH_TOKEN);
-
-    us.email = undefined;
-    us.id = undefined;
-    us.name = undefined;
-    us.token = undefined;
+  UNSET_USER(state) {
+    state.user = null;
   },
 };
 

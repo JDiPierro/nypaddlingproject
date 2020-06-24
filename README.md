@@ -7,17 +7,19 @@ I was able to use paddling.com's Algolia-powered search to build a list of over 
 This application is going to be our tool to track who's working on what, what's left to work on, and who the top contributors are.
 
 # Idea List
-- Sign in with Facebook
+- DONE: Sign in with Facebook
     - Limit contributions to members of the Upstate NY Kayaking group
-- Display the list of locations, searchable by County
+- DONE: Display the list of locations, searchable by County
 - Allow users to "Claim" a location that they plan to scout
+    - Add checkboxes for "Updated Description" and "Added Photos" so reviewers know what to look for. 
 - Once a user has updated an entry they mark it Complete - Pending Verification
 - That puts it in a queue that admins have access to
 - An admin verifies the update was real and high quality.
 - The admin awards the user with points based on the quality of the report (5, 10, 15?)
 - Display a leaderboard of who has the most points
 - Add the location scraping code to this repo.
-    - Pull in the Paddling.com location ID and slug
+    - DONE: Pull in the Paddling.com location ID and slug
+- Have a "Tutorial" page that uses fake data to walk users through claiming a location and submitting their pending updates.
 
 # Data models:
 

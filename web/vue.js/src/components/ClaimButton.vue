@@ -33,7 +33,6 @@
     methods: {
       ...mapActions('locations', ['claim']),
       claimedByActiveUser() {
-        //TODO: Fix user state and this method.
         for(const claim of this.claims) {
           if(claim['user_id'] === this.user['_id']) {
             return true

@@ -19,6 +19,7 @@
       <v-text-field
         label="Search"
         v-model="searchFilter"
+        clearable
         outlined
       ></v-text-field>
     </v-col>
@@ -31,6 +32,23 @@
     <template v-slot:item.name="{ item }">
       <h2>{{item.name}}</h2>
     </template>
+
+    <template v-slot:item.desc_len="{ item }">
+      <v-chip
+        :color="descBadgeColor(item.desc_len)"
+      >
+        {{item.desc_len}}
+      </v-chip>
+    </template>
+
+    <template v-slot:item.num_photos="{ item }">
+      <v-chip
+        :color="photoBadgeColor(item.num_photos)"
+      >
+        {{item.num_photos}}
+      </v-chip>
+    </template>
+
     <template v-slot:item.link="{ item }">
       <v-btn color="primary" :href="item.link" target="_blank">Paddling.com</v-btn>
       &nbsp;
@@ -55,6 +73,26 @@
     },
     methods: {
       ...mapActions('locations',['claim']),
+      descBadgeColor(len_s) {
+        const len = parseInt(len_s)
+        if(len === 0) {
+          return "error"
+        }
+        if(len < 100) {
+          return "warning"
+        }
+        return "success"
+      },
+      photoBadgeColor(num_s) {
+        const num = parseInt(num_s)
+        if(num === 0) {
+          return "error"
+        }
+        if(num < 2) {
+          return "warning"
+        }
+        return "success"
+      }
     },
     computed: {
       ...mapGetters('locations', ['counties']),

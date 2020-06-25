@@ -2,7 +2,7 @@
   <v-navigation-drawer :clipped="$vuetify.breakpoint.lgAndUp" v-model="value" fixed app disable-resize-watcher>
 
     <v-list dense>
-      <v-list-item @click="goTo('/')">
+      <v-list-item to="/">
         <v-list-item-action>
           <v-icon>home</v-icon>
         </v-list-item-action>
@@ -10,7 +10,7 @@
           <v-list-item-title>Home</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
-      <v-list-item @click="goTo('/locations')">
+      <v-list-item to="locations">
         <v-list-item-action>
           <v-icon>mdi-map-marker</v-icon>
         </v-list-item-action>

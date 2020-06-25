@@ -6,7 +6,7 @@
         There's not much here right now but check back later to find out how you can help!
       </v-alert>
       <h1>Claimed Locations</h1>
-      <v-row>
+      <v-row v-if="user_claims.length > 0">
         <v-col
           xs="12"
           sm="6"
@@ -19,6 +19,12 @@
             ></ClaimedLocationCard>
         </v-col>
       </v-row>
+      <v-sheet v-if="user_claims.length == 0">
+        <h3>
+          Visit the <v-btn small color="primary" to="locations"><v-icon left>mdi-map-marker</v-icon> Locations</v-btn> page to claim a location!
+        </h3>
+
+      </v-sheet>
     </v-container>
   </v-main>
 </template>

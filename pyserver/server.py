@@ -214,6 +214,27 @@ def claim_location(location_id):
   return _resolve(new_claim)
 
 
+@app.route('/api/locations/<location_id>/claim/release', methods=['POST'])
+@login_required
+def release_location_claim(location_id):
+  user = session.get("user")
+  if user is None or user.get("_id") is None:
+    return abort(400, "User not found in session")
+
+  location = LOCATIONS.find_one({"_id": ObjectId(location_id)})
+  if location is None:
+    return abort(404, f"Location  doesn't exist")
+
+  found = CLAIMS.find_one_and_delete({
+    "location_id": location_id,
+    "user_id": user.get("_id"),
+  })
+  if found is None:
+    return abort(400, "You don't have a pending claim for this location")
+
+  return _resolve("Success")
+
+
 @app.route('/api/me/claims', methods=['GET'])
 @login_required
 def user_claims():

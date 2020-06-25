@@ -12,6 +12,7 @@ This application is going to be our tool to track who's working on what, what's 
 - DONE: Display the list of locations, searchable by County
 - Allow users to "Claim" a location that they plan to scout
     - Add checkboxes for "Updated Description" and "Added Photos" so reviewers know what to look for. 
+- Add a button to report a broken link
 - Once a user has updated an entry they mark it Complete - Pending Verification
 - That puts it in a queue that admins have access to
 - An admin verifies the update was real and high quality.

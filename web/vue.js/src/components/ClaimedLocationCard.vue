@@ -1,11 +1,25 @@
 <template>
-  <v-card>
-    <v-card-title>
+  <v-card class="fill-height d-flex flex-column pa-2">
+    <v-btn
+      dark
+      fab
+      absolute
+      top
+      right
+      x-small
+      class="mt-7"
+      color="red"
+      @click="release({ location_id: claim.location_id })"
+    >
+      <v-icon>mdi-close</v-icon>
+    </v-btn>
+    <v-card-title class="mr-6">
       {{claim.location.name}}
     </v-card-title>
     <v-card-subtitle>
       {{ claim.location.county }} county
     </v-card-subtitle>
+    <v-spacer></v-spacer>
     <v-card-actions>
       <v-btn color="primary" :href="claim.location.link" target="_blank">Paddling.com</v-btn>
 
@@ -15,12 +29,19 @@
 </template>
 
 <script>
+  import { mapActions } from 'vuex';
+
   export default {
     props: ["claim"],
-    name: "ClaimedLocationCard"
+    name: "ClaimedLocationCard",
+    methods: {
+      ...mapActions('locations', ['release']),
+    }
   }
 </script>
 
 <style scoped>
-
+  .v-card__text, .v-card__title {
+    word-break: normal;
+  }
 </style>

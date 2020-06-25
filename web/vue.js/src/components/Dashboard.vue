@@ -6,15 +6,19 @@
         There's not much here right now but check back later to find out how you can help!
       </v-alert>
       <h1>Claimed Locations</h1>
-      <v-list>
-        <v-list-item
-          v-for="claim in user_claims"
-        >
-          <ClaimedLocationCard
-            :claim="claim"
-          ></ClaimedLocationCard>
-        </v-list-item>
-      </v-list>
+      <v-row>
+        <v-col
+          xs="12"
+          sm="6"
+          md="4"
+          lg="4"
+          xl="3"
+          v-for="claim in user_claims">
+            <ClaimedLocationCard
+              :claim="claim"
+            ></ClaimedLocationCard>
+        </v-col>
+      </v-row>
     </v-container>
   </v-main>
 </template>

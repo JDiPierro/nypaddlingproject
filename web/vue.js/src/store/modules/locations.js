@@ -33,6 +33,14 @@ const actions = {
       dispatch('alert/error', 'Unable to communicate with server...', {root:true})
     })
   },
+  async release({ commit, dispatch }, { location_id }) {
+    await locationService.release(location_id).then(async () => {
+      commit('release', { location_id })
+    }).catch((e) => {
+      console.log(e)
+      dispatch('alert/error', 'Unable to communicate with server...', {root:true})
+    })
+  },
   getDetails({commit, dispatch}, { location_id }) {
     locationService.details(location_id).then(() => {
       commit('details', location_id)
@@ -53,6 +61,19 @@ const mutations = {
         break
       }
     }
+  },
+  release(state, { location_id }) {
+    for(const loc of state.locations) {
+      if(loc["_id"] === location_id) {
+        loc["claims"].filter(function( obj ) {
+          return obj.location_id !== location_id;
+        });
+        break
+      }
+    }
+    state.user_claims = state.user_claims.filter(function( obj ) {
+      return obj.location_id !== location_id;
+    });
   },
   loadClaims (state, claims) {
     state.user_claims = claims

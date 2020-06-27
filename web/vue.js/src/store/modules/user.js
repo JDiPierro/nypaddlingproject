@@ -8,7 +8,7 @@ import config from 'config'
 
 // Initial State
 const state = {
-  user: null,
+  user: null
 };
 
 // Getters

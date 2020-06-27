@@ -41,6 +41,14 @@ FACEBOOK_APP_SECRET = os.environ.get("FB_APP_SECRET")
 APP_PROTOCOL = os.environ.get("APP_PROTOCOL", "https")
 APP_DOMAIN = os.environ.get("APP_DOMAIN", "localhost:8080")
 
+#############
+# CONSTANTS #
+#############
+CLAIM_STATUS_INITIAL = "initial"
+CLAIM_STATUS_SUBMITTED = "submitted"
+CLAIM_STATUS_PARTIAL = "partial_updated"
+CLAIM_STATUS_FINAL = "final"
+
 #################
 # setup the app #
 #################
@@ -206,13 +214,32 @@ def claim_location(location_id):
     "user_id": user.get("_id"),
     "created_at": datetime.now(),
     "updated_at": datetime.now(),
-    "status": "pending"
+    "status": CLAIM_STATUS_INITIAL
   }
   inserted = CLAIMS.insert_one(new_claim)
   new_claim["_id"] = inserted.inserted_id
 
   return _resolve(new_claim)
 
+
+def claim_for_user(location_id):
+  user = session.get("user")
+  if user is None or user.get("_id") is None:
+    abort(400, "User not found in session")
+
+  location = LOCATIONS.find_one({"_id": ObjectId(location_id)})
+  if location is None:
+    abort(404, f"Location  doesn't exist")
+
+  claim = CLAIMS.find_one({
+    "location_id": location_id,
+    "user_id": user.get("_id"),
+  })
+  if claim is None:
+    abort(400, "You don't have a pending claim for this location")
+
+  claim['location'] = location
+  return claim
 
 @app.route('/api/locations/<location_id>/claim/release', methods=['POST'])
 @login_required
@@ -233,6 +260,21 @@ def release_location_claim(location_id):
     return abort(400, "You don't have a pending claim for this location")
 
   return _resolve("Success")
+
+
+@app.route('/api/locations/<location_id>/claim/submit', methods=['POST'])
+@login_required
+def submit_location_claim(location_id):
+  claim = claim_for_user(location_id)
+
+  claim['status'] = CLAIM_STATUS_SUBMITTED
+  claim['update_info'] = request.json
+
+  found = CLAIMS.find_one_and_replace({"_id": ObjectId(claim["_id"])}, claim)
+  if found is None:
+    return abort(400, "You don't have a pending claim for this location")
+
+  return _resolve(claim)
 
 
 @app.route('/api/me/claims', methods=['GET'])

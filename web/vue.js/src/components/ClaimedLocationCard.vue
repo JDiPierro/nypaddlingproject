@@ -1,6 +1,7 @@
 <template>
   <v-card class="fill-height d-flex flex-column pa-2">
     <v-btn
+      v-if="canRelease"
       dark
       fab
       absolute
@@ -22,20 +23,28 @@
     <v-spacer></v-spacer>
     <v-card-actions>
       <v-btn color="primary" :href="claim.location.link" target="_blank">Paddling.com</v-btn>
-
-      <v-btn color="success">Submit Change</v-btn>
+      <SubmitClaimButton :claim="claim"></SubmitClaimButton>
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
   import { mapActions } from 'vuex';
+  import { default as SubmitClaimButton } from './SubmitClaimButton'
 
   export default {
     props: ["claim"],
     name: "ClaimedLocationCard",
+    components: {
+      SubmitClaimButton
+    },
     methods: {
       ...mapActions('locations', ['release']),
+    },
+    computed: {
+      canRelease() {
+        return this.claim.status === "initial"
+      }
     }
   }
 </script>

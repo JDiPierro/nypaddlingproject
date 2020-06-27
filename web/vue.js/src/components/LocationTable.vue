@@ -25,8 +25,10 @@
     </v-col>
   </v-row>
   <v-data-table
+    id="location-table"
     :headers="headers"
     :items="locations"
+    :items-per-page="itemsPerPage"
     :search="searchFilter"
   >
     <template v-slot:item.name="{ item }">
@@ -71,27 +73,11 @@
     components: {
       ClaimButton
     },
-    methods: {
-      ...mapActions('locations',['claim']),
-      descBadgeColor(len_s) {
-        const len = parseInt(len_s)
-        if(len === 0) {
-          return "error"
-        }
-        if(len < 100) {
-          return "warning"
-        }
-        return "success"
-      },
-      photoBadgeColor(num_s) {
-        const num = parseInt(num_s)
-        if(num === 0) {
-          return "error"
-        }
-        if(num < 2) {
-          return "warning"
-        }
-        return "success"
+    data: () => {
+      return {
+        selectedCounty: null,
+        searchFilter: null,
+        itemsPerPage: 12
       }
     },
     computed: {
@@ -116,17 +102,36 @@
           { text: 'Num Photos', value: 'num_photos', filterable: false, width: 50 },
           { text: 'Links', value: 'link', sortable: false, filterable: false, width: 350 },
         ]
-      },
-    },
-    data: () => {
-      return {
-        selectedCounty: null,
-        searchFilter: null,
       }
-    }
+    },
+    methods: {
+      ...mapActions('locations',['claim']),
+      descBadgeColor(len_s) {
+        const len = parseInt(len_s)
+        if(len === 0) {
+          return "error"
+        }
+        if(len < 100) {
+          return "warning"
+        }
+        return "success"
+      },
+      photoBadgeColor(num_s) {
+        const num = parseInt(num_s)
+        if(num === 0) {
+          return "error"
+        }
+        if(num < 2) {
+          return "warning"
+        }
+        return "success"
+      }
+    },
   }
 </script>
 
 <style scoped>
-
+  #location-table >>> tr {
+    height: 60px;
+  }
 </style>

@@ -21,6 +21,7 @@ This application is going to be our tool to track who's working on what, what's 
 - Add the location scraping code to this repo.
     - DONE: Pull in the Paddling.com location ID and slug
 - Have a "Tutorial" page that uses fake data to walk users through claiming a location and submitting their pending updates.
+- Add loading anims
 
 # Data models:
 

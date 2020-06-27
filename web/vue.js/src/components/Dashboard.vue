@@ -9,7 +9,7 @@
           Visit the <v-btn small color="primary" to="locations"><v-icon left>mdi-map-marker</v-icon> Locations</v-btn> page to claim a location!
         </h3>
       </ClaimList>
-      <div v-if="initialClaims.lenght > 0">
+      <div v-if="initialClaims.length > 0">
         <v-divider class="my-10"></v-divider>
         <h1>Submitted Claims</h1>
         <ClaimList

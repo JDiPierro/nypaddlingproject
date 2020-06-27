@@ -77,6 +77,9 @@ CORS(app, resources={r'/api/login*': {'origins': '*'}})
 #########
 mongo = PyMongo(app)
 DB = mongo.cx.nypaddlingproject
+if APP_ENV == "dev":
+  DB = mongo.cx.nypaddledev
+
 LOCATIONS = DB.locations
 USERS = DB.users
 CLAIMS = DB.location_claims

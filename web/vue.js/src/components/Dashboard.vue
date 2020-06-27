@@ -6,7 +6,7 @@
         :claims="initialClaims"
       >
         <h3>
-          Visit the <v-btn small color="primary" to="locations"><v-icon left>mdi-map-marker</v-icon> Locations</v-btn> page to claim a location, then come back here to report that you submitted a change.
+          Visit the <v-btn small color="primary" to="locations"><v-icon left>mdi-map-marker</v-icon> Locations</v-btn> page to claim a location!
         </h3>
       </ClaimList>
       <v-divider class="my-10"></v-divider>

@@ -1,7 +1,6 @@
 <template>
   <v-card class="fill-height d-flex flex-column pa-2">
     <v-btn
-      v-if="canRelease"
       dark
       fab
       absolute
@@ -41,11 +40,6 @@
     methods: {
       ...mapActions('locations', ['release']),
     },
-    computed: {
-      canRelease() {
-        return this.claim.status === "initial"
-      }
-    }
   }
 </script>
 

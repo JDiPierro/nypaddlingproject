@@ -11,10 +11,11 @@
     >
       <ClaimedLocationCard
         :claim="claim"
+        :key="claim._id"
       ></ClaimedLocationCard>
     </v-col>
   </v-row>
-  <v-sheet v-else-if="claims.length == 0">
+  <v-sheet v-else-if="claims.length == 0" class="mt-4">
     <slot></slot>
   </v-sheet>
 </template>

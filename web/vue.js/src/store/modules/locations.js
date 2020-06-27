@@ -1,4 +1,5 @@
 import { locationService } from '../services'
+import Vue from 'vue';
 
 const state = {
   locations: [],
@@ -95,22 +96,11 @@ const mutations = {
     });
   },
   submit(state, { updated_claim }) {
-    // Update the claims list on the location
-    const location = state.locations.find((obj) => {
-      return obj['_id'] === updated_claim['location_id']
-    })
-    if (location) {
-      const submitted_claim_idx = location["claims"].findIndex(( obj ) => {
-        return obj.location_id !== updated_claim['location_id'];
-      });
-      location['claims'][submitted_claim_idx] = updated_claim
-    }
-
     // Update the claim in the user's list of claims
     const user_claim_idx = state.user_claims.findIndex(( obj ) => {
-      return obj['_id'] !== updated_claim['_id'];
+      return obj['_id'] === updated_claim['_id'];
     });
-    state.user_claims[user_claim_idx] = updated_claim
+    Vue.set(state.user_claims, user_claim_idx, updated_claim)
   },
   loadClaims (state, claims) {
     state.user_claims = claims

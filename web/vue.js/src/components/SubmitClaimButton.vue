@@ -95,7 +95,7 @@
         if(this.claim['status'] === 'initial') {
           return "Submit Change"
         }
-        return "Update Change"
+        return "Update Submission"
       }
     },
     beforeMount() {

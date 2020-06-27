@@ -53,7 +53,9 @@
 
     <template v-slot:item.link="{ item }">
       <v-btn color="primary" :href="item.link" target="_blank">Paddling.com</v-btn>
-      &nbsp;
+    </template>
+
+    <template v-slot:item.claims.length="{ item }">
       <ClaimButton
         :location_id="item._id"
         :claims="item.claims"
@@ -100,7 +102,8 @@
           { text: 'Updated At', value: 'updated_at', filterable: false, width: 150 },
           { text: 'Description Length', value: 'desc_len', filterable: false, width: 50 },
           { text: 'Num Photos', value: 'num_photos', filterable: false, width: 50 },
-          { text: 'Links', value: 'link', sortable: false, filterable: false, width: 350 },
+          { text: 'Link', value: 'link', sortable: false, filterable: false, width: 50 },
+          { text: 'Claims', value: 'claims.length', sortable: true, filterable: false, width: 50 },
         ]
       }
     },

@@ -26,8 +26,12 @@ heroku_push:
 	docker tag nypaddlingproject registry.heroku.com/nypaddlingproject/web
 	heroku container:push -a nypaddlingproject web
 
-release:
+release-live:
 	git push heroku master
+
+
+release-dev:
+	git push heroku-dev master
 
 logs:
 	heroku logs --tail

@@ -9,13 +9,15 @@
           Visit the <v-btn small color="primary" to="locations"><v-icon left>mdi-map-marker</v-icon> Locations</v-btn> page to claim a location!
         </h3>
       </ClaimList>
-      <v-divider class="my-10"></v-divider>
-      <h1>Submitted Claims</h1>
-      <ClaimList
-        :claims="submittedClaims"
-      >
+      <div v-if="initialClaims.lenght > 0">
+        <v-divider class="my-10"></v-divider>
+        <h1>Submitted Claims</h1>
+        <ClaimList
+          :claims="submittedClaims"
+        >
           Scout a location, submit an update to Paddling.com, and then tell us about your awesome work!
-      </ClaimList>
+        </ClaimList>
+      </div>
     </v-container>
   </v-main>
 </template>

@@ -40,6 +40,7 @@ FACEBOOK_APP_ID = os.environ.get("FB_APP_ID")
 FACEBOOK_APP_SECRET = os.environ.get("FB_APP_SECRET")
 APP_PROTOCOL = os.environ.get("APP_PROTOCOL", "https")
 APP_DOMAIN = os.environ.get("APP_DOMAIN", "localhost:8080")
+APP_ENV = os.environ.get("APP_ENV", "local")
 
 #############
 # CONSTANTS #

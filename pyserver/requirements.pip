@@ -9,9 +9,3 @@ git+https://github.com/mitsuhiko/flask-oauth
 sentry-sdk==0.15.1
 sentry-sdk[flask]==0.15.1
 blinker
-
-
-
-# Security alerts from external deps
-websocket-extensions@^0.1.4:
-  version "0.1.4"

@@ -4,7 +4,7 @@
     <v-list dense>
       <v-list-item to="/">
         <v-list-item-action>
-          <v-icon>mdi-clipboard</v-icon>
+          <v-icon>mdi-clipboard-list-outline</v-icon>
         </v-list-item-action>
         <v-list-item-content>
           <v-list-item-title>My Claimed Locations</v-list-item-title>

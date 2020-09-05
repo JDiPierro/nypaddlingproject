@@ -12,7 +12,7 @@
     "axios": "^0.19.2",
     "jwt-decode": "^2.2.0",
     "md5": "^2.2.1",
-    "node-sass": "^4.13.0",
+    "node-sass": "^4.13.1",
     "sass-loader": "^8.0.0",
     "vue": "2.6.10",
     "vue-class-component": "^6.0.0",
